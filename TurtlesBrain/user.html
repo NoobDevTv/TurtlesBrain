@@ -1,0 +1,77 @@
+﻿
+<html>
+<head>
+    <title>Turtle Commander</title>
+    <script>
+        var socket = new WebSocket("ws://suschpc.noip.me:34197");
+        var lastcommand = "";
+        socket.onmessage = function(event)
+        {
+            console.log(event.data);
+            var resultElement = document.createElement("label");
+            var reasonElement = document.createElement("label");
+            var array = event.data.split("|");
+            if (array[0] == "list")
+            {
+                document.getElementById("dropDownMenu").innerHTML = "";
+                for (var i = 1; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.setAttribute("value",array[i]);
+                    option.innerHTML = array[i];
+                    document.getElementById("dropDownMenu").appendChild(option);
+                }
+            }
+            else if (array[0] == "result")
+            {
+                if (array[3] == "nil")
+                    array[3] = "";
+                
+
+                var element = document.createElement("p");
+                element.innerHTML = "<strong>" + array[1] + "</strong> = <strong>Result: </strong>" + array[2] + " --- <strong>Reason: </strong>" + array[3];
+                document.body.appendChild(element);
+            }
+            else {
+
+            }       
+        }
+
+        function getTextField(id)
+        {
+            return document.getElementById(id).options[document.getElementById(id).selectedIndex].text;
+        }
+
+        function sendCommand(label,command)
+        {
+            socket.send(label + "|" + command)
+            lastcommand = command;
+        }
+    </script>
+</head>
+<body>
+    <label>Name der Turtle</label>
+    <select id="dropDownMenu" >
+
+    </select>
+    <p/>
+    <label>Command</label>
+    <input id="command" />
+    <button onclick="sendCommand(getTextField('dropDownMenu'),getTextField('command'));">Send</button>
+    <p/>
+    <label>Standard Commands:</label>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.down()');">Down</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.up()');">Up</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.turnLeft()');">Left</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.turnRight()');">Right</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.back()');">Back</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.forward()');">Forward</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.getFuelLevel()');">Fuel Level</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.refuel()');">Refuel</button>
+    <p/>
+    <label>Mining Turtle:</label>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.dig()');">Dig</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.digDown()');">Dig Down</button>
+    <button onclick="sendCommand(getTextField('dropDownMenu'),'turtle.digUp()');">Dig Up</button>    
+
+</body>
+</html>
