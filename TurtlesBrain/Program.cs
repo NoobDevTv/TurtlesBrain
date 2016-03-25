@@ -10,13 +10,13 @@ using System.Threading;
 
 namespace TurtlesBrain
 {
-    class Program
+    public class Program
     {
+        public static TurtleServer server;
 
         static void Main(string[] args)
         {//suschpc.noip.me
-            TurtleServer server = new TurtleServer();
-
+            server = new TurtleServer();
             server.Start();
             Console.WriteLine("Success");
             
@@ -26,8 +26,8 @@ namespace TurtlesBrain
                 string command = Console.ReadLine();
                 if (command == "exit")
                     break;
-
-                //server.AddCommand(command);
+            
+                server.AddCommand(command);
             }
         }
     }

@@ -8,36 +8,80 @@ using System.Threading.Tasks;
 
 namespace TurtlesBrain
 {
-    class Turtle
+    public class Turtle
     {
-        private Queue<string> commands = new Queue<string>();
-        private AutoResetEvent waitForCommand = new AutoResetEvent(false);
+        public string Label { get; private set; }
+
+        private Queue<KeyValuePair<string, TurtleServer.Result>> commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
+
+        public KeyValuePair<string, TurtleServer.Result> GetNextCommand()
+        {
+            return commands.Dequeue();
+        }
+
+        public bool IsNextCommand()
+        {
+            if (commands.Count == 0)
+                return false;
+
+            return true;
+        }
+
         public Turtle(string label)
         {
             Label = label;
         }
-        public string Label { get; private set; }
-        public void AddCommand( string command)
+        public void AddCommand(string command, TurtleServer.Result callback)
         {
-            lock (commands)
-            {
-                commands.Enqueue(command);
-
-            }
-            waitForCommand.Set();
+                commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command,callback));
         }
+
+        public bool down()
+        {
+            return GetBool(Send("turtle.down()"));
+        }
+
+        public bool GetBool(string theString)
+        {
+            return bool.Parse(theString.Split('|')[2]);
+        }
+
+        public string Send(string command)
+        {
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+
+            string response = null;
+
+            AddCommand( command, (result) =>
+             {
+                 response = result;
+                 waitHandle.Set();
+             });
+            waitHandle.WaitOne();
+
+            return response;
+        }
+
         public void QueryCommand(HttpListenerResponse response)
         {
-            if (commands.Count == 0)
-                waitForCommand.WaitOne();
-            string command;
-            lock (commands)
+
+
+            while(!IsNextCommand())
             {
-                command = commands.Dequeue();
+                Thread.Sleep(25);
             }
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(command);
+
+            KeyValuePair<string, TurtleServer.Result> nextCommand = GetNextCommand();
+
+            lock (Program.server.commandPoolOderSo)
+            {
+                Program.server.commandPoolOderSo.Add(Label, nextCommand);
+            }
+
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(nextCommand.Key);
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
+
     }
 }
