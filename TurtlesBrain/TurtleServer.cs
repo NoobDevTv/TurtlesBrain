@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.WebSockets;
 
-namespace httpServer
+namespace TurtlesBrain
 {
     class TurtleServer
     {

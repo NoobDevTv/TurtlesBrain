@@ -8,7 +8,7 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-namespace httpServer
+namespace TurtlesBrain
 {
     class Program
     {
