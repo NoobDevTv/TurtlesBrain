@@ -20,7 +20,6 @@ namespace TurtlesBrain
                 Console.WriteLine(commands.Count);
                 return commands.Dequeue();
             }
-            Console.WriteLine("GetNextCommand");
             return commands.Dequeue();
         }
         public Computer(string label)
@@ -45,7 +44,6 @@ namespace TurtlesBrain
                 waitHandle.Set();
             });
             waitHandle.WaitOne();
-            Console.WriteLine("send: " + command);
             return response;
         }
 

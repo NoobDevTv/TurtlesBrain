@@ -32,37 +32,19 @@ namespace TurtlesBrain
                 string command = Console.ReadLine();
                 if (command == "exit")
                     break;
-                else if (command == "script")
+                else if (command == "script")//first, suschstinkt, tester, rave1000_1, myTurtle
                 {
                     Thread thread = new Thread(sdothis);
                     thread.Name = "ScriptThread";
                     thread.Start();
-                    Thread thread2 = new Thread(sdothis2);
-                    thread2.Name = "ScriptThread2";
-                    thread2.Start();
-                    Thread thread3 = new Thread(sdothis3);
-                    thread3.Name = "ScriptThread3";
-                    thread3.Start();
                 }
-
-                //    server.AddCommand(command);
             }
         }
 
         private static void sdothis()
         {
-            Script s = new Script("myTurtle");
-            s.doThis();
-        }
-        private static void sdothis2()
-        {
-            Script s = new Script("tester");
-            s.doThis();
-        }
-        private static void sdothis3()
-        {
-            Script s = new Script("rave1000_1");
-            s.doThis();
+            string[] str = new string[5] { "tester", "suschstinkt", "myTurtle", "rave1000_1", "first" };
+            WriteText s = new WriteText(str,"Hallo Tom");
         }
     }
 }

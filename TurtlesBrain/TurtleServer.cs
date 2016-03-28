@@ -66,7 +66,6 @@ namespace TurtlesBrain
                 string localPath = request.Url.LocalPath.TrimEnd('/');
                 if (localPath.StartsWith("/turtle/") && request.QueryString.AllKeys.Contains("label"))
                 {
-                    Console.WriteLine(localPath);
                     Console.Write(">");
                     var label = request.QueryString["label"];
 
