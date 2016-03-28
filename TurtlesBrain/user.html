@@ -1,15 +1,22 @@
-﻿
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>Turtle Commander</title>
-    <!-- Latest compiled and minified CSS 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.2.0/foundation.min.css">
 
+    <script   src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+    <script src="https://rawgit.com/farinspace/jquery.tableScroll/master/jquery.tablescroll.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.min.css">
+    <!-- Site Setup Script -->
+    <script>
+    $(document).ready(function(){
+      $("#table").tableScroll({height: 500});
+    });
+    </script>
+    <!-- Websocket Script -->
     <script>
         var socket = new WebSocket("ws://suschpc.noip.me:34197");
         var lastcommand = "";
+
         socket.onmessage = function(event)
         {
             console.log(event.data);
@@ -30,83 +37,94 @@
             {
                 if (array[4] == "nil")
                     array[4] = "";
-                
 
                 var element = document.createElement("tr");
                 element.innerHTML = "<td>" + array[1] + "</td><td>" + array[2] + "</td><td>" + array[3] + "</td><td>" + array[4] + "</td>";
-                document.getElementById("table").appendChild(element);
-                document.getElementById("table").scrollTop = document.getElementById("table").scrollHeight;
+                document.getElementById("table-body").appendChild(element);
+                var objDiv = document.getElementsByClassName("tablescroll_wrapper")[0];
+                objDiv.scrollTop = objDiv.scrollHeight;
             }
             else {
-
-            }       
+            }
         }
-
         function getDropdown(id)
         {
             return document.getElementById(id).options[document.getElementById(id).selectedIndex].text;
         }
-
         function getTextField(id)
         {
             return document.getElementById(id).value;
         }
-
         function sendCommand(label,command)
         {
             socket.send(label + "|" + command)
             lastcommand = command;
         }
     </script>
-</head>
-<body>
-    <label>Name der Turtle</label>
-    <select id="dropDownMenu" >
 
-    </select>
-    <p/>
-    <label>Command</label>
-    <input id="command" />
-    <button onclick="sendCommand(getTextField('dropDownMenu'),getTextField('command'));">Send</button>
-    <p/>
-    <label>Standard Commands:</label>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.down()');">Down</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.up()');">Up</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.turnLeft()');">Left</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.turnRight()');">Right</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.back()');">Back</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.forward()');">Forward</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.getFuelLevel()');">Fuel Level</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.refuel()');">Refuel</button>
-    <p/>                      
-    <label>Mining Turtle:</label>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.dig()');">Dig</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.digDown()');">Dig Down</button>
-    <button onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.digUp()');">Dig Up</button>    
+</head>
+<body style="background-color: #fafafa">
+  <div class="row expanded" style="padding-top: 1rem;">
+    <div class="large-5 columns">
+
+      <div class="callout secondary">
+          <h5>Name der Turtle</h5>
+          <select id="dropDownMenu" >
+          </select>
+          <span></span>
+      </div>
+
+
+
+      <div class="callout secondary">
+        <h5>Command</h5>
+        <div class="row expanded" style="padding-right: 1rem;">
+          <div class="small-10 columns" style="padding: 0px;">
+              <input style="width: 100%" type="text" id="command" />
+          </div>
+          <div class="small-2 columns" style="padding-left: 1rem; padding-right: 0px;">
+              <button class="secondary button" style="width: 100%" onclick="sendCommand(getTextField('dropDownMenu'),getTextField('command'));">Send</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="callout secondary">
+        <h5>Standard Turtle Commands</h5>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.down()');">Down</button>
+        <button class="secondary button"  onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.turnRight()');">Right</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.back()');">Back</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.forward()');">Forward</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.turnLeft()');">Left</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.getFuelLevel()');">Fuel Level</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.refuel()');">Refuel</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.up()');">Up</button>
+        <span></span>
+      </div>
+
+      <div class="callout secondary">
+        <h5>Mining Turtle</h5>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.dig()');">Dig</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.digDown()');">Dig Down</button>
+        <button class="secondary button" onclick="sendCommand(getDropdown('dropDownMenu'),'turtle.digUp()');">Dig Up</button>
+        <span></span>
+      </div>
+
+
+
+
+    </div>
+
+
+    <div class="large-7 columns">
 
     <style>
-    table tbody, table thead
-{
-    display: block;
-}
-
-table tbody 
-{
-   overflow: auto;
-   height: 100px;
-}
-
-table {
-    width: 350px; /* can be dynamic */
-}
-
-th
-{
-    width: 75px;
-}
+      .tablescroll_head{
+        margin-bottom:0px;
+      }
     </style>
 
-    <table class="table table-striped header-fixed">
+      <table id="table" style="width: 100%">
         <thead>
             <tr>
                 <td>Label</td>
@@ -115,9 +133,14 @@ th
                 <td>Reason</td>
             </tr>
         </thead>
-        <tbody id="table">
 
-        </tbody>
-    </table>
+          <tbody id="table-body">
+
+          </tbody>
+      </table>
+
+    </div>
+  </div>
+
 </body>
 </html>
