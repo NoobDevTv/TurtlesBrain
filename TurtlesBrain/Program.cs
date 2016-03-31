@@ -32,7 +32,7 @@ namespace TurtlesBrain
                 string command = Console.ReadLine();
                 if (command == "exit")
                     break;
-                else if (command == "script")//first, suschstinkt, tester, rave1000_1, myTurtle
+                else if (command == "script")
                 {
                     Thread thread = new Thread(sdothis);
                     thread.Name = "ScriptThread";
@@ -44,7 +44,7 @@ namespace TurtlesBrain
         private static void sdothis()
         {
             string[] str = new string[5] { "tester", "suschstinkt", "myTurtle", "rave1000_1", "first" };
-            WriteText s = new WriteText(str,"Hallo Tom");
+            WriteText s = new WriteText(str,"suschstinkt");
         }
     }
 }

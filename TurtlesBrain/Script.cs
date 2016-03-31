@@ -244,11 +244,30 @@ namespace TurtlesBrain
         public void Fill()
         {
             dict.Add("a", new string[] { "---", "- -", "---", "- -", "- -" });
-            dict.Add("h", new string[] { "-  -", "-  -", "----", "-  -", "-  -" });
+            dict.Add("b", new string[] { "---", "- -", "---", "- -", "---" });
+            dict.Add("c", new string[] { "---", "-  ", "-  ", "-  ", "---" });
+            dict.Add("d", new string[] { "-- ", "- -", "- -", "- -", "-- " });
+            dict.Add("e", new string[] { "---", "-  ", "-- ", "-  ", "---" });
+            dict.Add("f", new string[] { "---", "-  ", "-- ", "-  ", "-  " });
+            dict.Add("g", new string[] { "---", "-  ", "- -", "- -", "---" });
+            dict.Add("h", new string[] { "-  -", "-  -", "----", "-  -", "-  -" });//suschstinkt
+            dict.Add("i", new string[] { "-", "-", "-", "-", "-" });
+            dict.Add("j", new string[] { "---", "  -", "  -", "- -", "---" });
+            dict.Add("k", new string[] { "-  -", "- - ", "--  ", "- - ", "-  -" });
             dict.Add("l", new string[] { "-  ", "-  ", "-  ", "-  ", "---" });
             dict.Add("m", new string[] { "-   -", "-- --", "- - -", "-   -", "-   -" });
+            dict.Add("n", new string[] { "-   ", "----", "-  -", "-  -", "-  -" });
             dict.Add("o", new string[] { "---", "- -", "- -", "- -", "---" });
+            dict.Add("p", new string[] { "---", "- -", "---", "-  ", "-  " });
+            dict.Add("r", new string[] { "---", "- -", "---", "-- ", "- -" });
+            dict.Add("s", new string[] { "---", "-  ", "---", "  -", "---" });
             dict.Add("t", new string[] { "---", " - ", " - ", " - ", " - " });
+            dict.Add("u", new string[] { "- -", "- -", "- -", "- -", "---" });
+            dict.Add("v", new string[] { "-   -", "-   -", " - - ", " - - ", "  -  " });
+            dict.Add("w", new string[] { "-   -", "-  - ", "- - -", "-- --", "-   -" });
+            dict.Add("x", new string[] { "-   -", " - - ", "  -  ", " - - ", "-   -" });
+            dict.Add("y", new string[] { "- -", "- -", " - ", " - ", " - " });
+            dict.Add("z", new string[] { "-----", "   - ", "  -  ", " -   ", "-----" });
             dict.Add(" ", new string[] { "  ", "  ", "  ", "  ", "  " });
         }
     }

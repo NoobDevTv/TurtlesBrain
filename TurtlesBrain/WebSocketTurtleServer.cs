@@ -11,6 +11,7 @@ namespace TurtlesBrain
     {
         private IWebSocketConnection socket;
         private WebSocketServer webServer = new WebSocketServer("ws://0.0.0.0:34197");
+        private WebSocketHttpRequest req = new WebSocketHttpRequest();
 
         public WebSocketTurtleServer()
         {
