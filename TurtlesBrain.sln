@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "turtleAPI", "turtleAPI\turt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CD08B6D-2D09-454B-8AF5-97A4F18737DC}"
+	ProjectSection(SolutionItems) = preProject
+		packages\Fleck.0.13.0.57\lib\net40\Fleck.dll = packages\Fleck.0.13.0.57\lib\net40\Fleck.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
