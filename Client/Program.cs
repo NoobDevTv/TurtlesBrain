@@ -18,6 +18,13 @@ namespace Client
             string i;
             Console.WriteLine(t.down(out i));
             Console.WriteLine(i);
+            Console.WriteLine(t.up(out i));
+            Console.WriteLine(i);
+            Console.WriteLine(t.turnLeft(out i));
+            Console.WriteLine(i);
+            Console.WriteLine(t.turnRight(out i));
+            Console.WriteLine(i);
+
             Console.ReadKey();
         }
     }

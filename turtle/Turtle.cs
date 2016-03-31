@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace turtleAPI
+namespace turtle
 {
     public class Turtle : Computer
     {
-        
+        private Queue<KeyValuePair<string, TurtleServer.Result>> commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
 
         public Turtle(string label) : base(label)
         {
