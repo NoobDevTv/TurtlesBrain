@@ -9,7 +9,6 @@ namespace TurtlesBrain
 {
     public class TurtleServer
     {
-
         private HttpListener server = new HttpListener();
         public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
         public Dictionary<string, Turtle> turtles = new Dictionary<string, Turtle>();
@@ -18,8 +17,9 @@ namespace TurtlesBrain
         {
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
-
+            server.Prefixes.Add("http://+:4344/api/");
             server.Start();
+
             server.BeginGetContext(EndGetContext, null);
         }
 
@@ -130,6 +130,30 @@ namespace TurtlesBrain
                 else if (localPath == "/user")
                 {
                     User(response);
+                }
+                else if (localPath.StartsWith("/api/") && request.QueryString.AllKeys.Contains("label"))
+                {
+                    Turtle turtle;
+                    var label = request.QueryString["label"];
+                    if (turtles.TryGetValue(label, out turtle))
+                    {
+                        if (localPath == "/api/queryCommand")
+                        {
+                            turtle.QueryCommand(response);
+                        }
+                        else if (localPath == "/api/command" && request.QueryString.AllKeys.Contains("label"))
+                        {
+                            using (System.IO.Stream body = request.InputStream)
+                            {
+                                using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
+                                {
+                                    string s = reader.ReadToEnd();
+                                    response.AddHeader("erfolg",turtle.Send(s));
+                                    
+                                }
+                            }
+                        }
+                    }
                 }
 
                 response.Close();

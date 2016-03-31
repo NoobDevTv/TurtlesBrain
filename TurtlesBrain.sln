@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain", "TurtlesBrain\TurtlesBrain.csproj", "{B8E360B0-371F-40F6-B506-34E72FC28B20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "turtleAPI", "turtleAPI\turtleAPI.csproj", "{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{B8E360B0-371F-40F6-B506-34E72FC28B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8E360B0-371F-40F6-B506-34E72FC28B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8E360B0-371F-40F6-B506-34E72FC28B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4D1F36-459F-4553-8457-93F83C7E1D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4D1F36-459F-4553-8457-93F83C7E1D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4D1F36-459F-4553-8457-93F83C7E1D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4D1F36-459F-4553-8457-93F83C7E1D6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
