@@ -13,14 +13,15 @@ namespace turtleAPI
         public string Label { get; private set; }
 
         static WebRequest req;
+
         public Computer(string label)
         {
-            Label = label;
-            req = WebRequest.Create("http://suschpc.noip.me:4344/api/command/?label=" + label);
+            Label = label;            
         }
 
         public string Send(string command)
         {
+            req = WebRequest.Create("http://suschpc.noip.me:4344/api/command/?label=" + Label);
             req.Method = "POST";
             string postData = command;
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -49,6 +50,7 @@ namespace turtleAPI
         {
             return int.Parse(theString.Split('|')[1]);
         }
+
         public string GetReason(string theString)
         {
             return theString.Split('|')[2];

@@ -22,16 +22,15 @@ namespace TurtlesBrain
             }
             return commands.Dequeue();
         }
-
         public Computer(string label)
         {
             Label = label;
         }
-
         public void AddCommand(string command, TurtleServer.Result callback)
         {
             commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command, callback));
         }
+
 
         public string Send(string command)
         {
@@ -84,7 +83,6 @@ namespace TurtlesBrain
         {
             return int.Parse(theString.Split('|')[1]);
         }
-
         public string GetReason(string theString)
         {
             return theString.Split('|')[2];

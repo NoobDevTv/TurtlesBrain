@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TurtlesBrain
+namespace turtle
 {
     public class Turtle : Computer
     {
-        private Queue<KeyValuePair<string, TurtleServer.Result>> commands;
+        private Queue<KeyValuePair<string, TurtleServer.Result>> commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
 
         public Turtle(string label) : base(label)
         {
-            commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
         }
 
         public bool down()
@@ -22,6 +21,7 @@ namespace TurtlesBrain
             string reason = "";
             return down(out reason);
         }
+
         public bool down(out string Reason)
         {
             string result = Send("turtle.down()");
@@ -88,7 +88,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool turnRight()
         {
             string reason = "";
@@ -100,15 +99,14 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool select(byte slot)
         {
             string reason = "";
-            return select(slot, out reason);
+            return select(slot,out reason);
         }
         public bool select(byte slot, out string Reason)
         {
-            string result = Send("turtle.select(" + slot + ")");
+            string result = Send("turtle.select("+slot+")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -129,22 +127,24 @@ namespace TurtlesBrain
             return GetByte(Send("turtle.getSelectedSlot()"));
         }
 
-        /// <summary>
-        /// Counts how many items are in the currently selected slot or, if specified, slotNum slot 
-        /// </summary>
-        /// <param name="Reason"></param>
-        /// <returns></returns>
+
         public bool getItemCount(byte slotNum)
         {
             string reason = "";
             return select(slotNum, out reason);
         }
+        /// <summary>
+        /// Counts how many items are in the currently selected slot or, if specified, slotNum slot 
+        /// </summary>
+        /// <param name="Reason"></param>
+        /// <returns></returns>
         public byte getItemCount(byte slotNum, out string Reason)
         {
-            string result = Send("turtle.getItemCount(" + slotNum + ")");
+            string result = Send("turtle.getItemCount("+slotNum+")");
             Reason = GetReason(result);
             return GetByte(result);
         }
+
         public bool getItemCount()
         {
             string reason = "";
@@ -175,7 +175,7 @@ namespace TurtlesBrain
         }
         public bool getItemSpace(byte slotNum, out string Reason)
         {
-            string result = Send("turtle.getItemSpace(" + slotNum + ")");
+            string result = Send("turtle.getItemSpace("+slotNum+")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -191,7 +191,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool equipRight()
         {
             string reason = "";
@@ -215,7 +214,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool attackUp()
         {
             string reason = "";
@@ -227,7 +225,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool attackDown()
         {
             string reason = "";
@@ -239,7 +236,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool dig()
         {
             string reason = "";
@@ -251,7 +247,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool digUp()
         {
             string reason = "";
@@ -263,7 +258,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool digDown()
         {
             string reason = "";
@@ -275,7 +269,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool place()
         {
             string reason = "";
@@ -294,7 +287,7 @@ namespace TurtlesBrain
         }
         public bool place(string signText, out string Reason)
         {
-            string result = Send("turtle.place(" + signText + ")");
+            string result = Send("turtle.place("+signText+")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -310,7 +303,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool placeDown()
         {
             string reason = "";
@@ -322,7 +314,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool detect()
         {
             string reason = "";
@@ -334,7 +325,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool detectUp()
         {
             string reason = "";
@@ -346,7 +336,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool detectDown()
         {
             string reason = "";
@@ -358,7 +347,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool compare()
         {
             string reason = "";
@@ -382,7 +370,6 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetBool(result);
         }
-
         public bool compareDown()
         {
             string reason = "";
@@ -413,7 +400,7 @@ namespace TurtlesBrain
         }
         public bool compareTo(byte slot, out string Reason)
         {
-            string result = Send("turtle.compareTo(" + slot + ")");
+            string result = Send("turtle.compareTo("+slot+")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -432,11 +419,11 @@ namespace TurtlesBrain
         public bool drop(byte amount)
         {
             string reason = "";
-            return drop(amount, out reason);
+            return drop(amount,out reason);
         }
         public bool drop(byte amount, out string Reason)
         {
-            string result = Send("turtle.drop(" + amount + ")");
+            string result = Send("turtle.drop("+ amount + ")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -455,7 +442,7 @@ namespace TurtlesBrain
         public bool dropUp(byte amount)
         {
             string reason = "";
-            return dropUp(amount, out reason);
+            return dropUp(amount,out reason);
         }
         public bool dropUp(byte amount, out string Reason)
         {
@@ -478,7 +465,7 @@ namespace TurtlesBrain
         public bool dropDown(byte amount)
         {
             string reason = "";
-            return dropDown(amount, out reason);
+            return dropDown(amount,out reason);
         }
         public bool dropDown(byte amount, out string Reason)
         {
@@ -501,7 +488,7 @@ namespace TurtlesBrain
         public bool suck(byte amount)
         {
             string reason = "";
-            return suck(amount, out reason);
+            return suck(amount,out reason);
         }
         public bool suck(byte amount, out string Reason)
         {
@@ -524,7 +511,7 @@ namespace TurtlesBrain
         public bool suckUp(byte amount)
         {
             string reason = "";
-            return suckUp(amount, out reason);
+            return suckUp(amount,out reason);
         }
         public bool suckUp(byte amount, out string Reason)
         {
@@ -601,12 +588,12 @@ namespace TurtlesBrain
             Reason = GetReason(result);
             return GetInt(result);
         }
-
         public bool transferTo(byte slot)
         {
             string reason = "";
             return transferTo(slot, out reason);
         }
+
         public bool transferTo(byte slot, out string Reason)
         {
             string result = Send("turtle.transferTo()");
