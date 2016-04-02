@@ -137,11 +137,7 @@ namespace TurtlesBrain
                     var label = request.QueryString["label"];
                     if (turtles.TryGetValue(label, out turtle))
                     {
-                        if (localPath == "/api/queryCommand")
-                        {
-                            turtle.QueryCommand(response);
-                        }
-                        else if (localPath == "/api/command" && request.QueryString.AllKeys.Contains("label"))
+                        if (localPath == "/api/command" && request.QueryString.AllKeys.Contains("label"))
                         {
                             using (System.IO.Stream body = request.InputStream)
                             {
