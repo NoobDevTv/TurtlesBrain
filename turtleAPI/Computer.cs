@@ -13,6 +13,7 @@ namespace turtleAPI
         public string Label { get; private set; }
 
         static WebRequest req;
+
         public Computer(string label)
         {
             Label = label;            
@@ -49,6 +50,7 @@ namespace turtleAPI
         {
             return int.Parse(theString.Split('|')[1]);
         }
+
         public string GetReason(string theString)
         {
             return theString.Split('|')[2];

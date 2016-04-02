@@ -10,11 +10,14 @@ namespace TurtlesBrain
     public class WebSocketTurtleServer
     {
         private IWebSocketConnection socket;
-        private WebSocketServer webServer = new WebSocketServer("ws://0.0.0.0:34197");
-        private WebSocketHttpRequest req = new WebSocketHttpRequest();
+        private WebSocketServer webServer;
+        private WebSocketHttpRequest req;
 
         public WebSocketTurtleServer()
         {
+            webServer = new WebSocketServer("ws://0.0.0.0:34197");
+            req = new WebSocketHttpRequest();
+
             webServer.Start(internalSocket =>
             {
                 socket = internalSocket;

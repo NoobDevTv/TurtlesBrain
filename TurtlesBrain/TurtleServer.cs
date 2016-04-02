@@ -9,12 +9,17 @@ namespace TurtlesBrain
 {
     public class TurtleServer
     {
-        private HttpListener server = new HttpListener();
-        public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
-        public Dictionary<string, Turtle> turtles = new Dictionary<string, Turtle>();
+        private HttpListener server;
+        public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
+        public Dictionary<string, Turtle> turtles;
 
         public TurtleServer()
         {
+            server = new HttpListener();
+            commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
+            turtles = new Dictionary<string, Turtle>();
+
+
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
             server.Prefixes.Add("http://+:4344/api/");
@@ -144,7 +149,7 @@ namespace TurtlesBrain
                                 using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
                                 {
                                     string s = reader.ReadToEnd();
-                                    response.AddHeader("erfolg",turtle.Send(s));
+                                    response.AddHeader("erfolg", turtle.Send(s));
                                     
                                 }
                             }

@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace TurtlesBrain
 {
     public class first
-    {//first, suschstinkt, tester, rave1000_1, myTurtle
+    {
+        //first, suschstinkt, tester, rave1000_1, myTurtle
 
         Turtle turtle;
         
