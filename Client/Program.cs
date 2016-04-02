@@ -22,8 +22,9 @@ namespace Client
                         Console.WriteLine(item.Invoke(t, new object[0]));
                         break;
                     }
+                }
+                Console.ReadKey();
             }
-            Console.ReadKey();
         }
     }
 }

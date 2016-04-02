@@ -8,9 +8,55 @@ using System.Threading.Tasks;
 
 namespace turtleAPI
 {
+    public enum direction_enum
+    {
+        North,
+        East,
+        South,
+        West
+    }
+
     public class Turtle : Computer
     {
+        private long _XCoordinate = 0;
+        private long _YCoordinate = 0;
+        private long _ZCoordinate = 0;
+        private direction_enum _direction = direction_enum.North;
 
+        private direction_enum Direction
+        {
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
+                if (_direction > direction_enum.West)
+                {
+                    _direction = direction_enum.North;
+                }
+                if (_direction < direction_enum.North)
+                {
+                    _direction = direction_enum.West;
+                }
+            }
+        }
+
+        public long XCoordinate
+        {
+            get { return _XCoordinate; }
+        }
+
+        public long YCoordinate
+        {
+            get { return _YCoordinate; }
+        }
+
+        public long ZCoordinate
+        {
+            get { return _ZCoordinate; }
+        }
 
         public Turtle(string label) : base(label)
         {
@@ -18,6 +64,7 @@ namespace turtleAPI
 
         /// <summary>
         /// Try to move the turtle down
+        /// Decrease Relative Z Coordinate
         /// </summary>
         /// <returns>boolean success</returns>
         public bool down()
@@ -28,6 +75,7 @@ namespace turtleAPI
 
         /// <summary>
         /// Try to move the turtle down
+        /// Decrease Relative Z Coordinate
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
@@ -35,11 +83,21 @@ namespace turtleAPI
         {
             string result = Send("turtle.down()");
             Reason = GetReason(result);
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                _ZCoordinate--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         /// <summary>
         /// Try to move the turtle up
+        /// Increase Relative Z Coordinate
         /// </summary>
         /// <returns>boolean success</returns>
         public bool up()
@@ -50,6 +108,7 @@ namespace turtleAPI
 
         /// <summary>
         /// Try to move the turtle up
+        /// Increase Relative Z Coordinate
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
@@ -57,7 +116,15 @@ namespace turtleAPI
         {
             string result = Send("turtle.up()");
             Reason = GetReason(result);
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                _ZCoordinate++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -72,6 +139,7 @@ namespace turtleAPI
 
         /// <summary>
         /// Try to move the turtle forward
+        /// In/Decrease realtive X or Y Coordinate dependence on direction
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
@@ -79,11 +147,34 @@ namespace turtleAPI
         {
             string result = Send("turtle.forward()");
             Reason = GetReason(result);
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                switch (_direction)
+                {
+                    case direction_enum.North:
+                        _YCoordinate++;
+                        break;
+                    case direction_enum.South:
+                        _YCoordinate--;
+                        break;
+                    case direction_enum.East:
+                        _XCoordinate++;
+                        break;
+                    case direction_enum.West:
+                        _XCoordinate--;
+                        break;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
         /// Try to move the turtle backward 
+        /// In/Decrease realtive X or Y Coordinate dependence on direction
         /// </summary>
         /// <returns>boolean success </returns>
         public bool back()
@@ -95,6 +186,7 @@ namespace turtleAPI
 
         /// <summary>
         /// Try to move the turtle backward
+        /// In/Decrease realtive X or Y Coordinate dependence on direction
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
@@ -102,17 +194,48 @@ namespace turtleAPI
         {
             string result = Send("turtle.back()");
             Reason = GetReason(result);
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                switch (_direction)
+                {
+                    case direction_enum.North:
+                        _YCoordinate--;
+                        break;
+                    case direction_enum.South:
+                        _YCoordinate++;
+                        break;
+                    case direction_enum.East:
+                        _XCoordinate--;
+                        break;
+                    case direction_enum.West:
+                        _XCoordinate++;
+                        break;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
         /// Turn the turtle left
+        /// In/Decrease realtive X or Y Coordinate dependence on direction
         /// </summary>
         /// <returns>boolean success</returns>
         public bool turnLeft()
         {
             string result = Send("turtle.turnLeft()");
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                Direction--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -122,7 +245,15 @@ namespace turtleAPI
         public bool turnRight()
         {
             string result = Send("turtle.turnRight()");
-            return GetBool(result);
+            if (GetBool(result))
+            {
+                Direction++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
