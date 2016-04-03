@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 namespace turtleAPI
 {
     public class Computer
@@ -54,6 +50,11 @@ namespace turtleAPI
         public string GetReason(string theString)
         {
             return theString.Split('|')[2];
+        }
+
+        public string[] GetArray(string theString)
+        {
+            return theString.Split('|').ToArray<string>();
         }
     }
 }

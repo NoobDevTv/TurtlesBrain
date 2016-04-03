@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Net;
-using System.IO;
 using System.Threading;
 
 namespace TurtlesBrain
@@ -23,7 +16,7 @@ namespace TurtlesBrain
             TurtleServerThread.Start();
 
             Console.WriteLine("Success");
-            Thread WebsocketTurtleThread = new Thread(o => {webserver = new WebSocketTurtleServer(); });
+            Thread WebsocketTurtleThread = new Thread(o => { webserver = new WebSocketTurtleServer(); });
             WebsocketTurtleThread.Name = "WebsocketThread";
             WebsocketTurtleThread.Start();
             while(true)

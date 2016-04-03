@@ -1,7 +1,5 @@
-﻿using Fleck;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 
@@ -30,8 +28,13 @@ namespace TurtlesBrain
 
         private Turtle Handshake(string label, HttpListenerResponse response)
         {
+            CleanUp();
             if (turtles.ContainsKey(label))
-                label = CreateUniqueName();
+            {
+                if (isNewTurtle(label))
+                    label = CreateUniqueName();
+            }
+
 
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(label);
             response.ContentLength64 = buffer.Length;
@@ -42,6 +45,35 @@ namespace TurtlesBrain
 
             Program.webserver.UpdateList();
             return turtle;
+        }
+
+        private bool isNewTurtle(string label)
+        {
+            Turtle t;
+            turtles.TryGetValue(label, out t);
+            string id = "";
+            id = t.Send("turtle.getFuelLevel()");
+            if (id == null)
+            {
+                turtles.Remove(label);
+                return false;
+            }
+            return true;
+        }
+
+        private void CleanUp()
+        {
+            Dictionary<string, Turtle> temp = new Dictionary<string, Turtle>();
+            foreach (KeyValuePair<string,Turtle> item in turtles)
+            {
+                temp.Add(item.Key,item.Value);
+            }
+            foreach (KeyValuePair<string, Turtle> item in temp)
+            {
+                string s = item.Value.Send("turtle.getFuelLevel()");
+                if (s == null)
+                    turtles.Remove(item.Key);
+            }
         }
 
         private string CreateUniqueName()
@@ -90,11 +122,11 @@ namespace TurtlesBrain
                                     commandPoolOderSo.Remove(label);
                                 }
 
-                                foreach (var result in s.Split('|'))
-                                {
-                                    if (result != "nil")
-                                        Console.Write(result + " ");
-                                }
+                                //foreach (var result in s.Split('|'))
+                                //{
+                                //    if (result != "nil")
+                                //        Console.Write(result + " ");
+                                //}
                                 Console.WriteLine();
                             }
                         }
@@ -150,7 +182,7 @@ namespace TurtlesBrain
                                 {
                                     string s = reader.ReadToEnd();
                                     response.AddHeader("erfolg", turtle.Send(s));
-                                    
+
                                 }
                             }
                         }
