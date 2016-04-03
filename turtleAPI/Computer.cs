@@ -52,9 +52,9 @@ namespace turtleAPI
             return theString.Split('|')[2];
         }
 
-        public string[] GetArray(string theString)
+        public string[] GetArray(string theString, int skipAmount)
         {
-            return theString.Split('|').ToArray<string>();
+            return theString.Split('|').Skip(skipAmount).ToArray();
         }
     }
 }

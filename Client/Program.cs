@@ -8,7 +8,7 @@ namespace Client
 
         static void Main(string[] args)
         {
-            Turtle t = new Turtle("rave1000_1");
+            Turtle t = new Turtle("myTurtle");
             string i;
             while (true)
             {
@@ -23,7 +23,6 @@ namespace Client
                         break;
                     }
                 }
-                Console.ReadKey();
             }
         }
     }

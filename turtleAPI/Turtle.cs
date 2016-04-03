@@ -1053,7 +1053,7 @@ namespace turtleAPI
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
         public bool transferTo(byte slot, out string Reason)
         {
-            string result = Send("turtle.transferTo()");
+            string result = Send("turtle.transferTo(" + slot + ")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -1085,9 +1085,100 @@ namespace turtleAPI
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
         public bool transferTo(byte slot, byte quantity, out string Reason)
         {
-            string result = Send("turtle.transferTo()");
+            string result = Send("turtle.transferTo(" + slot +"," + quantity+ ")");
             Reason = GetReason(result);
             return GetBool(result);
+        }
+
+        /// <summary>
+        /// Returns the ID string and metadata of the block in front of the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspect()
+        {
+            string[] reason;
+            return inspect(out reason);
+        }
+        /// <summary>
+        /// Returns the ID string and metadata of the block in front of the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <param name="Reason">the reason of failur</param>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspect(out string[] Reason)
+        {
+            string result = Send("turtle.inspect()");
+            Reason = GetArray(result,1);
+            return GetBool(result);
+        }
+
+        /// <summary>
+        /// Returns the ID string and metadata of the block below the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspectDown()
+        {
+            string[] reason;
+            return inspectDown(out reason);
+        }
+        /// <summary>
+        /// Returns the ID string and metadata of the block below the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <param name="Reason">the reason of failure</param>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspectDown(out string[] Reason)
+        {
+            string result = Send("turtle.inspect()");
+            Reason = GetArray(result, 1);
+            return GetBool(result);
+        }
+
+        /// <summary>
+        /// Returns the ID string and metadata of the block above the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspectUp()
+        {
+            string[] reason;
+            return inspectUp(out reason);
+        }
+        /// <summary>
+        /// Returns the ID string and metadata of the block above the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
+        /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
+        /// </summary>
+        /// <param name="Reason">the reason of failur</param>
+        /// <returns>boolean if there was a inspectable block present</returns>
+        public bool inspectUp(out string[] Reason)
+        {
+            string result = Send("turtle.inspect()");
+            Reason = GetArray(result, 1);
+            return GetBool(result);
+        }
+
+        /// <summary>
+        /// Returns the ID string, count and damage values of the currently selected slot in an array format: { name = "modname:itemname", damage, count}. Returns nil if there is no item in the specified or currently selected slot.
+        /// </summary>
+        /// <returns>array of strings with name, damage and amount of item in the current slot</returns>
+
+        public string[] getItemDetail()
+        {
+            string result = Send("turtle.inspect()");
+            return GetArray(result,0);
+        }  
+        
+        /// <summary>
+        /// Returns the ID string, count and damage values of the given slot number in an array format: { name = "modname:itemname", damage, count}. Returns nil if there is no item in the specified or currently selected slot.
+        /// </summary>
+        /// <returns>array of strings with name, damage and amount of the item in the given slot</returns>
+
+        public string[] getItemDetail(byte slotNum)
+        {
+            string result = Send("turtle.inspect("+slotNum+")");
+            return GetArray(result, 0);
         }
     }
 }

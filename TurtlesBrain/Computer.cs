@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 namespace TurtlesBrain
@@ -85,6 +86,11 @@ namespace TurtlesBrain
         public string GetReason(string theString)
         {
             return theString.Split('|')[2];
+        }
+
+        public string[] GetArray(string theString, int skipAmount)
+        {
+            return theString.Split('|').Skip(skipAmount).ToArray();
         }
     }
 }
