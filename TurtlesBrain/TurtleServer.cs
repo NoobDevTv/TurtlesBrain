@@ -26,9 +26,10 @@ namespace TurtlesBrain
             server.BeginGetContext(EndGetContext, null);
         }
 
-        private Turtle Handshake(string label, HttpListenerResponse response)
+        private Turtle Handshake(string label, HttpListenerResponse response, string args)
         {
             CleanUp();
+
             if (turtles.ContainsKey(label))
             {
                 if (isNewTurtle(label))
@@ -42,7 +43,7 @@ namespace TurtlesBrain
 
             var turtle = new Turtle(label);
             turtles.Add(label, turtle);
-
+            turtle.args = args;
             Program.webserver.UpdateList();
             return turtle;
         }
@@ -64,9 +65,9 @@ namespace TurtlesBrain
         private void CleanUp()
         {
             Dictionary<string, Turtle> temp = new Dictionary<string, Turtle>();
-            foreach (KeyValuePair<string,Turtle> item in turtles)
+            foreach (KeyValuePair<string, Turtle> item in turtles)
             {
-                temp.Add(item.Key,item.Value);
+                temp.Add(item.Key, item.Value);
             }
             foreach (KeyValuePair<string, Turtle> item in temp)
             {
@@ -135,7 +136,14 @@ namespace TurtlesBrain
                     Turtle turtle;
                     if (localPath == "/turtle/hello")
                     {
-                        turtle = Handshake(label, response);
+                        using (System.IO.Stream body = request.InputStream)
+                        {
+                            using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
+                            {
+                                string s = reader.ReadToEnd();
+                                Handshake(label, response, s);
+                            }
+                        }
                     }
                     else if (turtles.TryGetValue(label, out turtle))
                     {
@@ -182,10 +190,15 @@ namespace TurtlesBrain
                                 {
                                     string s = reader.ReadToEnd();
                                     response.AddHeader("erfolg", turtle.Send(s));
-
                                 }
+
                             }
                         }
+                        else if (localPath == "/api/args" && request.QueryString.AllKeys.Contains("label"))
+                        {
+                            response.AddHeader("erfolg", turtle.args);
+                        }
+                        
                     }
                 }
 

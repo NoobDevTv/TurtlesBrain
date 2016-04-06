@@ -14,6 +14,7 @@ namespace turtleAPI
 
         public Turtle(string label) : base(label)
         {
+            Args();
         }
 
         /// <summary>
@@ -1180,5 +1181,7 @@ namespace turtleAPI
             string result = Send("turtle.inspect("+slotNum+")");
             return GetArray(result, 0);
         }
+
+        
     }
 }
