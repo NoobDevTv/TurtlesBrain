@@ -71,7 +71,7 @@ namespace TurtlesBrain
             }
             foreach (KeyValuePair<string, Turtle> item in temp)
             {
-                string s = item.Value.Send("turtle.getFuelLevel()");
+                string s = item.Value.Send("turtle.getFuelLevel()", 700);
                 if (s == null)
                     turtles.Remove(item.Key);
             }
@@ -198,7 +198,7 @@ namespace TurtlesBrain
                         {
                             response.AddHeader("erfolg", turtle.args);
                         }
-                        
+
                     }
                 }
 

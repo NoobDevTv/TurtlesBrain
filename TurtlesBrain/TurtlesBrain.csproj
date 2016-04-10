@@ -73,7 +73,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Script.cs" />
     <Compile Include="Turtle.cs" />
     <Compile Include="TurtleServer.cs" />
     <Compile Include="WebSocketTurtleServer.cs" />

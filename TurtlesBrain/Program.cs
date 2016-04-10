@@ -37,7 +37,7 @@ namespace TurtlesBrain
         private static void sdothis()
         {
             string[] str = new string[5] { "tester", "suschstinkt", "myTurtle", "rave1000_1", "first" };
-            WriteText s = new WriteText(str,"suschstinkt");
+            //WriteText s = new WriteText(str,"suschstinkt");
         }
     }
 }
