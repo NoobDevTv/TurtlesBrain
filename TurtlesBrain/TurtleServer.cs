@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fleck;
 using System.Linq;
 using System.Net;
 
@@ -7,6 +8,8 @@ namespace TurtlesBrain
 {
     public class TurtleServer
     {
+        private WebSocketServer socketServer;
+        private IWebSocketConnection socketConnection;
         private HttpListener server;
         public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
@@ -17,6 +20,32 @@ namespace TurtlesBrain
             commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
 
+            socketServer = new WebSocketServer("wss://+:4345");
+
+            socketServer.Start(internalSocket =>
+            {
+                socketConnection = internalSocket;
+                socketConnection.OnOpen = () =>
+                {
+                    Console.WriteLine("Uns fehlen offenstichtlich noch jede menge Kommentare - Tom Wendel 2016");//CAPSLOCK
+                };
+                socketConnection.OnMessage = (string message) =>
+                { 
+                    Console.WriteLine("Kommentare machen den Code unübersichtlicher.Kommentare wer braucht den Kommentare - Tom Wendel 2015");
+                    Console.WriteLine(message);
+                    Console.WriteLine("in update führen wir updates durch - Tom Wendel 2016");
+                };
+                socketConnection.OnError = (Exception somethingWentWrongOderSo) =>
+                {
+                    Console.WriteLine("Das wird eh kein Problem - Tom Wendel 2016");
+                };
+                socketConnection.OnClose = () =>
+                {
+                    Console.WriteLine("Performancetechnisch ist das nicht sehr smart - Tom Wendel 2015");
+                };
+            });
+
+            socketConnection.Send("Ach ficken! - Tom Wendel 2016");
 
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
@@ -45,6 +74,11 @@ namespace TurtlesBrain
 
             Program.webserver.UpdateList();
             return turtle;
+        }
+
+        private void ClientHandshake()
+        {
+            
         }
 
         private bool isNewTurtle(string label)
@@ -191,7 +225,7 @@ namespace TurtlesBrain
 
                 response.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
