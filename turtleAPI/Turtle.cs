@@ -92,7 +92,6 @@ namespace turtleAPI
             return back(out reason);
         }
 
-
         /// <summary>
         /// Try to move the turtle backward
         /// </summary>
@@ -151,7 +150,6 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slotNum">slot number, upper left 1 and lower right 16</param>
         /// <returns>slotNum the number of items found in the specified slot.</returns>
-
         public byte getItemCount(byte slotNum)
         {
             string result = Send("turtle.getItemCount(" + slotNum + ")");
@@ -999,7 +997,6 @@ namespace turtleAPI
         /// <param name="quantity">the amount of items to be consumed as fuel</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if fueled, else false.</returns>
-
         public bool refuel(byte quantity, out string Reason)
         {
             string result = Send("turtle.refuel(" + quantity + ")");
