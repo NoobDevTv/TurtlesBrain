@@ -1,35 +1,61 @@
-﻿using System;
+﻿using RedCorona.Net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 
 namespace TurtlesBrain
 {
     public class TurtleServer
     {
+        //private WebSocketServer socketServer;
+        //private IWebSocketConnection socketConnection;
         private HttpListener server;
         public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
+        private Server serv;
 
         public TurtleServer()
         {
             server = new HttpListener();
             commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
-
+            serv = new Server(7777, new ClientEvent(clientConnect));
 
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
-            server.Prefixes.Add("http://+:4344/api/");
             server.Start();
 
             server.BeginGetContext(EndGetContext, null);
         }
 
+
+        private bool clientConnect(Server serv, ClientInfo new_client)
+        {
+            new_client.MessageType = MessageType.CodeAndLength;
+            new_client.OnReadMessage += New_client_OnReadMessage;
+            return true;
+        }
+
+        private void New_client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
+        {
+            string message = Encoding.UTF8.GetString(bytes);
+            Turtle turtle;
+            string label = message.Split('|')[0];
+            if (turtles.TryGetValue(label, out turtle))
+            {
+                if (code == 1)
+                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.Send(message.Split('|')[1])));
+                else if (code == 2)
+                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.args));
+            }
+        }
+
+
         private Turtle Handshake(string label, HttpListenerResponse response, string args)
         {
             CleanUp();
-
             if (turtles.ContainsKey(label))
             {
                 if (isNewTurtle(label))
@@ -71,7 +97,7 @@ namespace TurtlesBrain
             }
             foreach (KeyValuePair<string, Turtle> item in temp)
             {
-                string s = item.Value.Send("turtle.getFuelLevel()", 700);
+                string s = item.Value.Send("turtle.getFuelLevel()");
                 if (s == null)
                     turtles.Remove(item.Key);
             }
@@ -176,35 +202,9 @@ namespace TurtlesBrain
                 {
                     User(response);
                 }
-                else if (localPath.StartsWith("/api/") && request.QueryString.AllKeys.Contains("label"))
-                {
-                    Turtle turtle;
-                    var label = request.QueryString["label"];
-                    if (turtles.TryGetValue(label, out turtle))
-                    {
-                        if (localPath == "/api/command" && request.QueryString.AllKeys.Contains("label"))
-                        {
-                            using (System.IO.Stream body = request.InputStream)
-                            {
-                                using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
-                                {
-                                    string s = reader.ReadToEnd();
-                                    response.AddHeader("erfolg", turtle.Send(s));
-                                }
-
-                            }
-                        }
-                        else if (localPath == "/api/args" && request.QueryString.AllKeys.Contains("label"))
-                        {
-                            response.AddHeader("erfolg", turtle.args);
-                        }
-
-                    }
-                }
-
                 response.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

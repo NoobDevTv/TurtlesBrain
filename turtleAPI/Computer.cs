@@ -2,81 +2,77 @@
 using System.Linq;
 using System.Net;
 using System.Text;
+using System;
+using System.Net.Sockets;
+using RedCorona.Net;
+using System.Threading;
+
 namespace turtleAPI
 {
     public class Computer
     {
         public string Label { get; private set; }
-        public string[] args;
+        public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
 
         static WebRequest req;
+        static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
+        static ClientInfo client = new ClientInfo(socket, false);
+        AutoResetEvent wait = new AutoResetEvent(false);
+        string returnString ="";
 
         public Computer(string label)
         {
             Label = label;
+            client.MessageType = MessageType.CodeAndLength;
+            client.OnReadMessage += Client_OnReadMessage;
+            client.BeginReceive();
         }
 
-        internal string Send(string command)
+        private void Client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
         {
-            req = WebRequest.Create("http://suschpc.noip.me:4344/api/command/?label=" + Label);
-            req.Method = "POST";
-            string postData = command;
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            req.ContentLength = byteArray.Length;
-            Stream dataStream = req.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = req.GetResponse();
-            dataStream = response.GetResponseStream();
-            dataStream.Close();
-            response.Close();
-            return response.Headers.Get("erfolg");
+            returnString = Encoding.UTF8.GetString(bytes);
+            wait.Set();
         }
 
-        internal void Args()
+
+        public string Send(string command)
         {
-            args = GetArray(getArgs(), 0);
+            byte[] temp = Encoding.UTF8.GetBytes(Label + "|" + command);
+            client.SendMessage(1, temp);
+            wait.WaitOne();
+            return returnString;
         }
 
         internal string getArgs()
         {
-            req = WebRequest.Create("http://suschpc.noip.me:4344/api/args/?label=" + Label);
-            req.Method = "POST";
-            string postData = "";
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            req.ContentLength = byteArray.Length;
-            Stream dataStream = req.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = req.GetResponse();
-            dataStream = response.GetResponseStream();
-            dataStream.Close();
-            response.Close();
-            return response.Headers.Get("erfolg");
+
+            byte[] temp = Encoding.UTF8.GetBytes(Label);
+            client.SendMessage(2, temp);
+            wait.WaitOne();
+            return returnString;
         }
 
-
-        internal bool GetBool(string theString)
+        public bool GetBool(string theString)
         {
             return bool.Parse(theString.Split('|')[1]);
         }
 
-        internal byte GetByte(string theString)
+        public byte GetByte(string theString)
         {
             return byte.Parse(theString.Split('|')[1]);
         }
 
-        internal int GetInt(string theString)
+        public int GetInt(string theString)
         {
             return int.Parse(theString.Split('|')[1]);
         }
 
-        internal string GetReason(string theString)
+        public string GetReason(string theString)
         {
             return theString.Split('|')[2];
         }
 
-        internal string[] GetArray(string theString, int skipAmount)
+        public string[] GetArray(string theString, int skipAmount)
         {
             return theString.Split('|').Skip(skipAmount).ToArray();
         }

@@ -25,19 +25,8 @@ namespace TurtlesBrain
                 string command = Console.ReadLine();
                 if (command == "exit")
                     break;
-                else if (command == "script")
-                {
-                    Thread thread = new Thread(sdothis);
-                    thread.Name = "ScriptThread";
-                    thread.Start();
-                }
+                
             }
-        }
-
-        private static void sdothis()
-        {
-            string[] str = new string[5] { "tester", "suschstinkt", "myTurtle", "rave1000_1", "first" };
-            //WriteText s = new WriteText(str,"suschstinkt");
         }
     }
 }

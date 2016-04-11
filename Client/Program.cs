@@ -5,25 +5,13 @@ namespace Client
 {
     class Program
     {
-
         static void Main(string[] args)
         {
-            Turtle t = new Turtle("myTurtle");
-            string i;
-            while (true)
-            {
-                string command = Console.ReadLine();
-                Type type = typeof(Turtle);
-                var v = type.GetMethods();
-                foreach (var item in v)
-                {
-                    if (item.Name.ToString().Contains(command))
-                    {
-                        Console.WriteLine(item.Invoke(t, new object[0]));
-                        break;
-                    }
-                }
-            }
+            Console.ReadKey();
+            SkyWriter writer = new SkyWriter(
+                new string[] { "turtleName1", "turtleName2", "turtleName3", "turtleName4", "turtleName5", }, 
+                "text to write");
+            Console.ReadKey();
         }
     }
 }

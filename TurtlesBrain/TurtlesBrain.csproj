@@ -53,7 +53,11 @@
       <HintPath>..\packages\Fleck.0.13.0.57\lib\net40\Fleck.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RedCorona">
+      <HintPath>..\..\..\..\Documents\Visual Studio 2015\Projects\RedCorona\RedCorona\bin\Debug\RedCorona.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
