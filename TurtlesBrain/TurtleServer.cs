@@ -154,7 +154,6 @@ namespace TurtlesBrain
                                 //    if (result != "nil")
                                 //        Console.Write(result + " ");
                                 //}
-                                Console.WriteLine();
                             }
                         }
                     }
