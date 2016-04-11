@@ -1,61 +1,59 @@
-﻿using System;
+﻿using RedCorona.Net;
+using System;
 using System.Collections.Generic;
-using Fleck;
 using System.Linq;
 using System.Net;
+using System.Text;
 
 namespace TurtlesBrain
 {
     public class TurtleServer
     {
-        private WebSocketServer socketServer;
-        private IWebSocketConnection socketConnection;
+        //private WebSocketServer socketServer;
+        //private IWebSocketConnection socketConnection;
         private HttpListener server;
         public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
+        private Server serv;
 
         public TurtleServer()
         {
             server = new HttpListener();
             commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
-
-            socketServer = new WebSocketServer("wss://+:4345");
-
-            socketServer.Start(internalSocket =>
-            {
-                socketConnection = internalSocket;
-                socketConnection.OnOpen = () =>
-                {
-                    Console.WriteLine("Uns fehlen offenstichtlich noch jede menge Kommentare - Tom Wendel 2016");//CAPSLOCK
-                };
-                socketConnection.OnMessage = (string message) =>
-                { 
-                    Console.WriteLine("Kommentare machen den Code unübersichtlicher.Kommentare wer braucht den Kommentare - Tom Wendel 2015");
-                    Console.WriteLine(message);
-                    Console.WriteLine("in update führen wir updates durch - Tom Wendel 2016");
-                };
-                socketConnection.OnError = (Exception somethingWentWrongOderSo) =>
-                {
-                    Console.WriteLine("Das wird eh kein Problem - Tom Wendel 2016");
-                };
-                socketConnection.OnClose = () =>
-                {
-                    Console.WriteLine("Performancetechnisch ist das nicht sehr smart - Tom Wendel 2015");
-                };
-            });
-
-            socketConnection.Send("Ach ficken! - Tom Wendel 2016");
+            serv = new Server(7777, new ClientEvent(clientConnect));
 
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
-            server.Prefixes.Add("http://+:4344/api/");
             server.Start();
 
             server.BeginGetContext(EndGetContext, null);
         }
 
-        private Turtle Handshake(string label, HttpListenerResponse response)
+
+        private bool clientConnect(Server serv, ClientInfo new_client)
+        {
+            new_client.MessageType = MessageType.CodeAndLength;
+            new_client.OnReadMessage += New_client_OnReadMessage;
+            return true;
+        }
+
+        private void New_client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
+        {
+            string message = Encoding.UTF8.GetString(bytes);
+            Turtle turtle;
+            string label = message.Split('|')[0];
+            if (turtles.TryGetValue(label, out turtle))
+            {
+                if (code == 1)
+                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.Send(message.Split('|')[1])));
+                else if (code == 2)
+                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.args));
+            }
+        }
+
+
+        private Turtle Handshake(string label, HttpListenerResponse response, string args)
         {
             CleanUp();
             if (turtles.ContainsKey(label))
@@ -71,14 +69,9 @@ namespace TurtlesBrain
 
             var turtle = new Turtle(label);
             turtles.Add(label, turtle);
-
+            turtle.args = args;
             Program.webserver.UpdateList();
             return turtle;
-        }
-
-        private void ClientHandshake()
-        {
-            
         }
 
         private bool isNewTurtle(string label)
@@ -98,9 +91,9 @@ namespace TurtlesBrain
         private void CleanUp()
         {
             Dictionary<string, Turtle> temp = new Dictionary<string, Turtle>();
-            foreach (KeyValuePair<string,Turtle> item in turtles)
+            foreach (KeyValuePair<string, Turtle> item in turtles)
             {
-                temp.Add(item.Key,item.Value);
+                temp.Add(item.Key, item.Value);
             }
             foreach (KeyValuePair<string, Turtle> item in temp)
             {
@@ -169,7 +162,14 @@ namespace TurtlesBrain
                     Turtle turtle;
                     if (localPath == "/turtle/hello")
                     {
-                        turtle = Handshake(label, response);
+                        using (System.IO.Stream body = request.InputStream)
+                        {
+                            using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
+                            {
+                                string s = reader.ReadToEnd();
+                                Handshake(label, response, s);
+                            }
+                        }
                     }
                     else if (turtles.TryGetValue(label, out turtle))
                     {
@@ -202,27 +202,6 @@ namespace TurtlesBrain
                 {
                     User(response);
                 }
-                else if (localPath.StartsWith("/api/") && request.QueryString.AllKeys.Contains("label"))
-                {
-                    Turtle turtle;
-                    var label = request.QueryString["label"];
-                    if (turtles.TryGetValue(label, out turtle))
-                    {
-                        if (localPath == "/api/command" && request.QueryString.AllKeys.Contains("label"))
-                        {
-                            using (System.IO.Stream body = request.InputStream)
-                            {
-                                using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
-                                {
-                                    string s = reader.ReadToEnd();
-                                    response.AddHeader("erfolg", turtle.Send(s));
-
-                                }
-                            }
-                        }
-                    }
-                }
-
                 response.Close();
             }
             catch (Exception)

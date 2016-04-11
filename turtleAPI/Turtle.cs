@@ -14,6 +14,7 @@ namespace turtleAPI
 
         public Turtle(string label) : base(label)
         {
+            
         }
 
         /// <summary>
@@ -1128,7 +1129,7 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspectDown(out string[] Reason)
         {
-            string result = Send("turtle.inspect()");
+            string result = Send("turtle.inspectDown()");
             Reason = GetArray(result, 1);
             return GetBool(result);
         }
@@ -1151,7 +1152,7 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspectUp(out string[] Reason)
         {
-            string result = Send("turtle.inspect()");
+            string result = Send("turtle.inspectUp()");
             Reason = GetArray(result, 1);
             return GetBool(result);
         }
@@ -1163,7 +1164,7 @@ namespace turtleAPI
 
         public string[] getItemDetail()
         {
-            string result = Send("turtle.inspect()");
+            string result = Send("turtle.getItemDetail()");
             return GetArray(result,0);
         }  
         
@@ -1174,7 +1175,7 @@ namespace turtleAPI
 
         public string[] getItemDetail(byte slotNum)
         {
-            string result = Send("turtle.inspect("+slotNum+")");
+            string result = Send("turtle.getItemDetail(" + slotNum+")");
             return GetArray(result, 0);
         }
     }

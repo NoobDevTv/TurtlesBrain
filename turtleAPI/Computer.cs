@@ -2,34 +2,54 @@
 using System.Linq;
 using System.Net;
 using System.Text;
+using System;
+using System.Net.Sockets;
+using RedCorona.Net;
+using System.Threading;
+
 namespace turtleAPI
 {
     public class Computer
     {
         public string Label { get; private set; }
+        public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
 
         static WebRequest req;
+        static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
+        static ClientInfo client = new ClientInfo(socket, false);
+        AutoResetEvent wait = new AutoResetEvent(false);
+        string returnString ="";
 
         public Computer(string label)
         {
-            Label = label;            
+            Label = label;
+            client.MessageType = MessageType.CodeAndLength;
+            client.OnReadMessage += Client_OnReadMessage;
+            client.BeginReceive();
         }
+
+        private void Client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
+        {
+            returnString = Encoding.UTF8.GetString(bytes);
+            wait.Set();
+        }
+
 
         public string Send(string command)
         {
-            req = WebRequest.Create("http://suschpc.noip.me:4344/api/command/?label=" + Label);
-            req.Method = "POST";
-            string postData = command;
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            req.ContentLength = byteArray.Length;
-            Stream dataStream = req.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = req.GetResponse();
-            dataStream = response.GetResponseStream();
-            dataStream.Close();
-            response.Close();
-            return response.Headers.Get("erfolg");
+            byte[] temp = Encoding.UTF8.GetBytes(Label + "|" + command);
+            client.SendMessage(1, temp);
+            wait.WaitOne();
+            return returnString;
+        }
+
+        internal string getArgs()
+        {
+
+            byte[] temp = Encoding.UTF8.GetBytes(Label);
+            client.SendMessage(2, temp);
+            wait.WaitOne();
+            return returnString;
         }
 
         public bool GetBool(string theString)
