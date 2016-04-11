@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "turtleAPI", "turtleAPI\turt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4ED40BF-9743-4E2B-B850-EE9AA68F5A1B}"
+	ProjectSection(SolutionItems) = preProject
+		TurtlesBrain\bin\Debug\RedCorona.dll = TurtlesBrain\bin\Debug\RedCorona.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
