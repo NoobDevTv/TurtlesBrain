@@ -54,7 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RedCorona">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2015\Projects\RedCorona\RedCorona\bin\Debug\RedCorona.dll</HintPath>
+      <HintPath>..\packages\RedCorona\RedCorona.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

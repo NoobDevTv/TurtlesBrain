@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain", "TurtlesBrain\TurtlesBrain.csproj", "{B8E360B0-371F-40F6-B506-34E72FC28B20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "turtleAPI", "turtleAPI\turtleAPI.csproj", "{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dll's", "dll's", "{D70942A4-AD28-4C25-AC93-744500FFC6B4}"
+	ProjectSection(SolutionItems) = preProject
+		packages\RedCorona\RedCorona.dll = packages\RedCorona\RedCorona.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
