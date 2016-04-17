@@ -16,7 +16,7 @@ namespace turtleAPI
 
         static WebRequest req;
         static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
-        static ClientInfo client = new ClientInfo(socket, false);
+        static ClientInfo client = new ClientInfo(socket,null,null,ClientDirection.Both,false,EncryptionType.ServerRSAClientKey);
         AutoResetEvent wait = new AutoResetEvent(false);
         string returnString ="";
 
@@ -25,7 +25,14 @@ namespace turtleAPI
             Label = label;
             client.MessageType = MessageType.CodeAndLength;
             client.OnReadMessage += Client_OnReadMessage;
+            client.OnReady += Client_OnReady;
             client.BeginReceive();
+            
+        }
+
+        private void Client_OnReady(ClientInfo ci)
+        {
+            Console.WriteLine("Client is now ready");
         }
 
         private void Client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)

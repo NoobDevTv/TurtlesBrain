@@ -22,7 +22,7 @@ namespace TurtlesBrain
             commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
             serv = new Server(7777, new ClientEvent(clientConnect));
-
+            serv.DefaultEncryptionType = EncryptionType.ServerRSAClientKey;
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
             server.Start();
@@ -33,9 +33,13 @@ namespace TurtlesBrain
 
         private bool clientConnect(Server serv, ClientInfo new_client)
         {
-            new_client.MessageType = MessageType.CodeAndLength;
-            new_client.OnReadMessage += New_client_OnReadMessage;
-            return true;
+            if (new_client.EncryptionType == EncryptionType.ServerRSAClientKey)
+            {
+                new_client.MessageType = MessageType.CodeAndLength;
+                new_client.OnReadMessage += New_client_OnReadMessage;
+                return true;
+            }
+            return false;
         }
 
         private void New_client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
