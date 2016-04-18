@@ -1095,19 +1095,19 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspect()
         {
-            string[] reason;
-            return inspect(out reason);
+            string[] dataArray;
+            return inspect(out dataArray);
         }
         /// <summary>
         /// Returns the ID string and metadata of the block in front of the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="Reason">the reason of failur</param>
+        /// <param name="dataArray">the array including the data</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspect(out string[] Reason)
+        public bool inspect(out string[] dataArray)
         {
             string result = Send("turtle.inspect()");
-            Reason = GetArray(result,1);
+            dataArray = GetArray(result,1);
             return GetBool(result);
         }
 
@@ -1125,12 +1125,12 @@ namespace turtleAPI
         /// Returns the ID string and metadata of the block below the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="Reason">the reason of failure</param>
+        /// <param name="dataArray">the array including the data</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectDown(out string[] Reason)
+        public bool inspectDown(out string[] dataArray)
         {
             string result = Send("turtle.inspectDown()");
-            Reason = GetArray(result, 1);
+            dataArray = GetArray(result, 1);
             return GetBool(result);
         }
 
@@ -1141,19 +1141,19 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspectUp()
         {
-            string[] reason;
-            return inspectUp(out reason);
+            string[] dataArray;
+            return inspectUp(out dataArray);
         }
         /// <summary>
         /// Returns the ID string and metadata of the block above the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="Reason">the reason of failur</param>
+        /// <param name="dataArray">the array including the data</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectUp(out string[] Reason)
+        public bool inspectUp(out string[] dataArray)
         {
             string result = Send("turtle.inspectUp()");
-            Reason = GetArray(result, 1);
+            dataArray = GetArray(result, 1);
             return GetBool(result);
         }
 
