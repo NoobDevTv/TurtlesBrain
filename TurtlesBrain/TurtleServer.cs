@@ -1,5 +1,4 @@
-﻿using RedCorona.Net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,47 +13,24 @@ namespace TurtlesBrain
         private HttpListener server;
         public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
-        private Server serv;
 
         public TurtleServer()
         {
             server = new HttpListener();
             commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
-            serv = new Server(7777, new ClientEvent(clientConnect));
-            serv.DefaultEncryptionType = EncryptionType.ServerRSAClientKey;
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
             server.Start();
-
             server.BeginGetContext(EndGetContext, null);
         }
 
 
-        private bool clientConnect(Server serv, ClientInfo new_client)
+        public void OnMessage()
         {
-            if (new_client.EncryptionType == EncryptionType.ServerRSAClientKey)
-            {
-                new_client.MessageType = MessageType.CodeAndLength;
-                new_client.OnReadMessage += New_client_OnReadMessage;
-                return true;
-            }
-            return false;
+
         }
 
-        private void New_client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
-        {
-            string message = Encoding.UTF8.GetString(bytes);
-            Turtle turtle;
-            string label = message.Split('|')[0];
-            if (turtles.TryGetValue(label, out turtle))
-            {
-                if (code == 1)
-                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.Send(message.Split('|')[1])));
-                else if (code == 2)
-                    ci.SendMessage(0, Encoding.UTF8.GetBytes(turtle.args));
-            }
-        }
 
 
         private Turtle Handshake(string label, HttpListenerResponse response, string args)

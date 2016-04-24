@@ -11,10 +11,9 @@ namespace turtleAPI
     public class Turtle : Computer
     {
 
-
-        public Turtle(string label) : base(label)
+        
+        internal Turtle(string label, Server server) : base(label, server)
         {
-            
         }
 
         /// <summary>
@@ -104,6 +103,8 @@ namespace turtleAPI
             Reason = GetReason(result);
             return GetBool(result);
         }
+
+   
 
         /// <summary>
         /// Turn the turtle left

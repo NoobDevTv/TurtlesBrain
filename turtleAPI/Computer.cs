@@ -4,60 +4,113 @@ using System.Net;
 using System.Text;
 using System;
 using System.Net.Sockets;
-using RedCorona.Net;
+//using RedCorona.Net;
 using System.Threading;
+using TurtlesBrain.Shared;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace turtleAPI
 {
-    public class Computer
+    public class Server : TurtleApiConnection
     {
-        public string Label { get; private set; }
-        public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
+        public static Server Connect(string ip, int port, string username, string password)
+        {
+            MessageConverter.Initialize();
 
-        static WebRequest req;
-        static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
-        static ClientInfo client = new ClientInfo(socket,null,null,ClientDirection.Both,false,EncryptionType.ServerRSAClientKey);
-        AutoResetEvent wait = new AutoResetEvent(false);
-        string returnString ="";
+            var t = Connection.Setup( ip,  port,  username,  password);
+            t.Wait();
+            return t.Result;
+        }
 
-        public Computer(string label)
+        public Turtle this[string label]
+        {
+            get
+            {
+                return _turtles[label]; //always trust the user :<
+            }
+        }
+
+        internal Server(NetworkStream stream) : base(stream)
+        {
+            //WriteAsync(new PongMessage());
+        }
+
+        //Directory<Type, Action<ITurtleApiMessage>> actions 
+        private Dictionary<string, Turtle> _turtles = new Dictionary<string, Turtle>();
+
+        protected override void Dispatch(ITurtleApiMessage msg)
+        {
+            Console.WriteLine(msg);
+            if(msg.GetType() == typeof(TurtleMessage))
+            {
+                var tm = (TurtleMessage)msg;
+                _turtles[tm.Label] = new Turtle(tm.Label, this);
+            }
+            else if(msg.GetType() == typeof(Response))
+            {
+                var rs = (Response)msg;
+                _turtles[rs.Label].OnMessage(rs.Content);
+            }
+
+        }
+    }
+
+    public class Computer 
+    {
+        internal Computer(string label, Server server)
         {
             Label = label;
-            client.MessageType = MessageType.CodeAndLength;
-            client.OnReadMessage += Client_OnReadMessage;
-            client.OnReady += Client_OnReady;
-            client.BeginReceive();
+            _server = server;
+        }
+        
+
+        public string Label { get; private set; }
+        //public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
+        
+        //static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
+        //static ClientInfo client = new ClientInfo(socket, null, null, ClientDirection.Both, false, EncryptionType.ServerRSAClientKey);
+        AutoResetEvent wait = new AutoResetEvent(false);
+        string returnString = "";
+        private Server _server;
+
+        //public Computer(string label)
+        //{
+        //    Label = label;
+        //    //client.MessageType = MessageType.CodeAndLength;
+        //    //client.OnReadMessage += Client_OnReadMessage;
+        //    //client.OnReady += Client_OnReady;
+        //    //client.BeginReceive();
             
-        }
+        //}
 
-        private void Client_OnReady(ClientInfo ci)
-        {
-            Console.WriteLine("Client is now ready");
-        }
+        //private void Client_OnReady(ClientInfo ci)
+        //{
+        //    Console.WriteLine("Client is now ready");
+        //}
 
-        private void Client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
+        public void OnMessage(string content)
         {
-            returnString = Encoding.UTF8.GetString(bytes);
+            returnString = content;
             wait.Set();
         }
 
 
         public string Send(string command)
         {
-            byte[] temp = Encoding.UTF8.GetBytes(Label + "|" + command);
-            client.SendMessage(1, temp);
-            wait.WaitOne();
+            _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
+            wait.WaitOne();            
             return returnString;
         }
 
-        internal string getArgs()
-        {
+        //internal string getArgs()
+        //{
 
-            byte[] temp = Encoding.UTF8.GetBytes(Label);
-            client.SendMessage(2, temp);
-            wait.WaitOne();
-            return returnString;
-        }
+        //    byte[] temp = Encoding.UTF8.GetBytes(Label);
+        //    client.SendMessage(2, temp);
+        //    wait.WaitOne();
+        //    return returnString;
+        //}
 
         public bool GetBool(string theString)
         {

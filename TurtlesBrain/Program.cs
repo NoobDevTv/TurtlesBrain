@@ -1,32 +1,46 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Text;
+using System.Security.Cryptography;
+using TurtlesBrain.Shared;
 
 namespace TurtlesBrain
 {
     public class Program
     {
-        public static TurtleServer server;
+        public static TurtleServer turtleserver;
+        public static ClientServer clientserver;
         public static WebSocketTurtleServer webserver;
+
 
         static void Main(string[] args)
         {
-            
-            Thread TurtleServerThread = new Thread(o => { server = new TurtleServer(); });
+            MessageConverter.Initialize();
+            Thread TurtleServerThread = new Thread(o => { turtleserver = new TurtleServer(); });
             TurtleServerThread.Name = "ServerThread";
             TurtleServerThread.Start();
+
+            clientserver = new ClientServer(7777);
+
 
             Console.WriteLine("Success");
             Thread WebsocketTurtleThread = new Thread(o => { webserver = new WebSocketTurtleServer(); });
             WebsocketTurtleThread.Name = "WebsocketThread";
             WebsocketTurtleThread.Start();
-            while(true)
-            {
-                Console.Write(">");
-                string command = Console.ReadLine();
-                if (command == "exit")
-                    break;
-                
-            }
+            //while (true)
+            //{
+            //    Console.Write(">");
+            //    string command = Console.ReadLine();
+            //    if (command == "exit")
+            //        break;
+
+            //}
+
+            Console.ReadLine();
         }
+
     }
 }

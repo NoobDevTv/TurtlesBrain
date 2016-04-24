@@ -21,7 +21,7 @@ namespace TurtlesBrain
                 internalSocket.OnOpen = () =>
                 {
                     string turtleList = "list";
-                    foreach (var item in Program.server.turtles)
+                    foreach (var item in Program.turtleserver.turtles)
                     {
                         turtleList += "|" + item.Value.Label;
                     }
@@ -30,14 +30,14 @@ namespace TurtlesBrain
                 };
                 internalSocket.OnClose = () => Console.WriteLine("Socket closed");
                 internalSocket.OnMessage = message => ProcessMessage(message);
-                Program.server.GotResult += (label, result) => internalSocket.Send("result|" + label + "|" + result);
+                Program.turtleserver.GotResult += (label, result) => internalSocket.Send("result|" + label + "|" + result);
             });
         }
 
         public void UpdateList()
         {
             string turtleList = "list";
-            foreach (var item in Program.server.turtles)
+            foreach (var item in Program.turtleserver.turtles)
             {
                 turtleList += "|" + item.Value.Label;
             }
@@ -50,7 +50,7 @@ namespace TurtlesBrain
             Turtle turtle;
             string label = message.Split('|')[0];
             string command = message.Split('|')[1];
-            Program.server.turtles.TryGetValue(label, out turtle);
+            Program.turtleserver.turtles.TryGetValue(label, out turtle);
             if (turtle != null)
             {
                 turtle.AddCommand(command, (test, result) => { });

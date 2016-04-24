@@ -11,18 +11,18 @@ namespace Client
         Dictionary<string, string[]> dict = new Dictionary<string, string[]>();
         static string Text;
         List<Thread> t = new List<Thread>();
-        int counter = 0;
 
-        public SkyWriter(string[] label, string text)
+        public SkyWriter(string[] label, string text, string username, string password)
         {
-
+            var server = Server.Connect("localhost", 21337, username, password);
+            
             Turtle turtle;
             for (int i = 0; i <= 4; i++)
             {
                 turtle = null;
                 while (turtle == null)
                 {
-                    turtle = new Turtle(label[i]);
+                    turtle = server[label[i]];
                     Thread.Sleep(500);
                 }
                 skyWriter.Add(turtle);

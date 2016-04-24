@@ -84,9 +84,9 @@ namespace TurtlesBrain
 
             currentCommand = nextCommand;
 
-            lock (Program.server.commandPoolOderSo)
+            lock (Program.turtleserver.commandPoolOderSo)
             {
-                Program.server.commandPoolOderSo.Add(Label, nextCommand);
+                Program.turtleserver.commandPoolOderSo.Add(Label, nextCommand);
             }
 
             currentResponse = response;
@@ -98,15 +98,15 @@ namespace TurtlesBrain
 
         public void Resend(TurtleServer.Result callback)
         {
-            lock (Program.server.commandPoolOderSo)
+            lock (Program.turtleserver.commandPoolOderSo)
             {
                 try
                 {
-                    Program.server.commandPoolOderSo.Remove(Label);
+                    Program.turtleserver.commandPoolOderSo.Remove(Label);
                 }
                 finally
                 {
-                    Program.server.commandPoolOderSo.Add(Label,
+                    Program.turtleserver.commandPoolOderSo.Add(Label,
                                        new KeyValuePair<string, TurtleServer.Result>(currentCommand.Key, callback));
                 }
             }
