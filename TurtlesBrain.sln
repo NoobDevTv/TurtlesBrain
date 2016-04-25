@@ -10,9 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dll's", "dll's", "{D70942A4-AD28-4C25-AC93-744500FFC6B4}"
-	ProjectSection(SolutionItems) = preProject
-		packages\RedCorona\RedCorona.dll = packages\RedCorona\RedCorona.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Shared", "TurtlesBrain.Shared\TurtlesBrain.Shared.csproj", "{0BF96C5F-3090-4F7A-BDE8-06B73769114F}"
 EndProject
