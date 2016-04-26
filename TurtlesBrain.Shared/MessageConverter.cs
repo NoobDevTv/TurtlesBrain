@@ -10,6 +10,7 @@ namespace TurtlesBrain.Shared
 {
     public delegate int Writer(ref byte[] buffer, ITurtleApiMessage message);
     public delegate ITurtleApiMessage Reader(byte[] buffer, int len);
+
     public static class MessageConverter
     {
         private static readonly Dictionary<int, Reader> Readers = new Dictionary<int, Reader>();
@@ -20,8 +21,9 @@ namespace TurtlesBrain.Shared
         public static ITurtleApiMessage Read(int messageType) => Read(messageType, null, 0);
         public static ITurtleApiMessage Read(int messageType, byte[] buffer, int read) => Readers[messageType](buffer, read);
 
-        private static void EnsureBufferSize(ref byte[] buffer, int pos, int toWrite) 
+        private static void EnsureBufferSize(ref byte[] buffer, int pos, int toWrite)
             => EnsureBufferSize(ref buffer, pos + toWrite);
+
         public static void EnsureBufferSize(ref byte[] buffer, int targetSize, bool growByRate = false)
         {
             if (buffer.Length >= targetSize)
@@ -69,8 +71,8 @@ namespace TurtlesBrain.Shared
             var typeVar = Expression.Variable(msgType);
             var readParam = Expression.Parameter(typeof(int));
 
-            var variables = new List<ParameterExpression> { typeVar };
-            var expressions = new List<Expression> { Expression.Assign(typeVar, Expression.New(msgType)) };
+            List<ParameterExpression> variables = new List<ParameterExpression> { typeVar };
+            List<Expression> expressions = new List<Expression> { Expression.Assign(typeVar, Expression.New(msgType)) };
 
             if (properties.Count > 0)
             {
@@ -141,7 +143,7 @@ namespace TurtlesBrain.Shared
             };
 
 
-            var expressions = new List<Expression> {
+            List<Expression> expressions = new List<Expression> {
                 Expression.Assign(typeVar, Expression.Convert(baseParam, msgType)),
                 Expression.Assign(posVar, Expression.Constant(8))
             };
@@ -170,7 +172,7 @@ namespace TurtlesBrain.Shared
         }
 
         private static Expression WriteInt32(Expression bufferParam, MethodInfo bufferSizeMethod, Expression pos, Expression value)
-        {           
+        {
             return Expression.Block(
                 Expression.Call(bufferSizeMethod, bufferParam, pos, Expression.Constant(4)),
                 Expression.Assign(Expression.ArrayAccess(bufferParam, Expression.PostIncrementAssign(pos)), Expression.Convert(value, typeof(byte))),
@@ -203,7 +205,7 @@ namespace TurtlesBrain.Shared
             var lenProp = typeof(string).GetProperty("Length");
             var charCount = typeof(UTF8Encoding).GetMethod("GetByteCount", new[] { typeof(string) });
             var strConv = typeof(UTF8Encoding).GetMethod("GetBytes", new[] { typeof(string), typeof(int), typeof(int), typeof(byte[]), typeof(int) });
-            
+
             return Expression.IfThenElse(
                 Expression.Equal(value, Expression.Constant(null, typeof(string))),
                 WriteInt32(bufferParam, bufferSizeMethod, pos, Expression.Constant(0)),
@@ -225,7 +227,7 @@ namespace TurtlesBrain.Shared
                 Expression.Assign(Expression.ArrayAccess(bufferParam, Expression.PostIncrementAssign(pos)), Expression.Convert(Expression.RightShift(value, Expression.Constant(8)), typeof(byte))),
                 pos
             );
-        }        
-        
+        }
+
     }
 }

@@ -13,7 +13,6 @@ namespace TurtlesBrain
         {
             webServer = new WebSocketServer("ws://0.0.0.0:34197");
             req = new WebSocketHttpRequest();
-            
 
             webServer.Start(internalSocket =>
             {
@@ -46,7 +45,6 @@ namespace TurtlesBrain
 
         private void ProcessMessage(string message)
         {
-
             Turtle turtle;
             string label = message.Split('|')[0];
             string command = message.Split('|')[1];
@@ -56,6 +54,5 @@ namespace TurtlesBrain
                 turtle.AddCommand(command, (test, result) => { });
             }
         }
-
     }
 }

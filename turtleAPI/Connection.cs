@@ -10,7 +10,6 @@ namespace turtleAPI
     {
         internal static async Task<Server> Setup(string ip, int port, string username, string password)
         {
-          
             var tcpClient = new TcpClient();
             await tcpClient.ConnectAsync(ip, port);
             Console.WriteLine("Connected");
@@ -19,25 +18,25 @@ namespace turtleAPI
 
             using (var dh = new ECDiffieHellmanCng())
             {
-                var buffer = new byte[1024];
+                byte[] buffer = new byte[1024];
                 var read = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                var otherKey = new byte[read];
+                byte[] otherKey = new byte[read];
                 Buffer.BlockCopy(buffer, 0, otherKey, 0, read);
                 var key = dh.DeriveKeyMaterial(CngKey.Import(otherKey, CngKeyBlobFormat.EccPublicBlob));
 
-                var pk = dh.PublicKey.ToByteArray();
+                byte[] pk = dh.PublicKey.ToByteArray();
                 await stream.WriteAsync(pk, 0, pk.Length);
 
                 aes.Key = key;
                 read = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                var iv = new byte[read];
+                byte[] iv = new byte[read];
                 Buffer.BlockCopy(buffer, 0, iv, 0, read);
                 aes.IV = iv;
 
                 var encryptor = aes.CreateEncryptor();
-                
+
                 var payload = Encoding.UTF8.GetBytes($"{username}\n{password}");
                 buffer = new byte[2048];
                 int total = 0;
@@ -59,12 +58,11 @@ namespace turtleAPI
                     total = final.Length + written;
                 }
 
-
-
                 await stream.WriteAsync(buffer, 0, total);
-                
+
                 return new Server(stream);
             }
+
             throw new InvalidOperationException();
         }
     }

@@ -1,11 +1,13 @@
-﻿namespace TurtlesBrain.Shared
+﻿using System;
+
+namespace TurtlesBrain.Shared
 {
     public interface ITurtleApiMessage
     {
 
     }
 
-    public abstract class TurtleApiMessage<T> : ITurtleApiMessage 
+    public abstract class TurtleApiMessage<T> : ITurtleApiMessage
         where T : TurtleApiMessage<T>, new()
     {
         public static int MessageType;

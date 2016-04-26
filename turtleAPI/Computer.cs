@@ -1,81 +1,34 @@
-﻿using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System;
-using System.Net.Sockets;
-//using RedCorona.Net;
+﻿using System.Linq;
 using System.Threading;
 using TurtlesBrain.Shared;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace turtleAPI
 {
-    public class Server : TurtleApiConnection
-    {
-        internal static Server Instance;
-        public static Server Connect(string ip, int port, string username, string password)
-        {
-            MessageConverter.Initialize();
-
-            var t = Connection.Setup(ip, port, username, password);
-            t.Wait();
-            Instance = t.Result;
-            return t.Result;
-        }
-
-        public Turtle this[string label]
-        {
-            get
-            {
-                var maxTimeOut = TimeSpan.FromMinutes(2).TotalMilliseconds + 100;
-                Turtle turtle;
-                while (!_turtles.TryGetValue(label, out turtle) && (maxTimeOut -= 100) > 0)
-                {
-                    Thread.Sleep(100);
-                }
-
-                return turtle;
-            }
-        }
-
-        internal Server(NetworkStream stream) : base(stream)
-        {
-            //WriteAsync(new PongMessage());
-        }
-
-        //Directory<Type, Action<ITurtleApiMessage>> actions 
-        // private Dictionary<string, Turtle> _turtles = new Dictionary<string, Turtle>();
-        private ConcurrentDictionary<string, Turtle> _turtles = new ConcurrentDictionary<string, Turtle>();
-        protected override void Dispatch(ITurtleApiMessage msg)
-        {
-            Console.WriteLine(msg);
-            if (msg.GetType() == typeof(TurtleMessage))
-            {
-                var tm = (TurtleMessage)msg;
-                _turtles[tm.Label] = new Turtle(tm.Label, this);
-            }
-            else if (msg.GetType() == typeof(Response))
-            {
-                var rs = (Response)msg;
-                _turtles[rs.Label].OnMessage(rs.Content);
-            }
-
-        }
-    }
-
+    /// <summary>
+    /// represents a Computer in the Minecraft world.
+    /// The Computer is the main block of ComputerCraft
+    /// </summary>
     public class Computer
     {
-        internal Computer(string label, Server server)
+        /// <summary>
+        /// The Name of your Computer
+        /// </summary>
+        public string Label { get; private set; }
+
+        /// <summary>
+        /// represents a Computer in the Minecraft world.
+        /// The Computer is the main block of ComputerCraft.
+        /// This initialize the connection to your computer
+        /// </summary>
+        /// <param name="label">the label of the Computer</param>
+        /// <param name="server">the API Server which holds the connection to the Minecraftserver</param>
+        public Computer(string label, Server server)
         {
             Label = label;
             _server = server;
         }
 
 
-        public string Label { get; private set; }
         //public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
 
         //static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
@@ -99,13 +52,18 @@ namespace turtleAPI
         //    Console.WriteLine("Client is now ready");
         //}
 
+        
         public void OnMessage(string content)
         {
             returnString = content;
             wait.Set();
         }
 
-
+        /// <summary>
+        /// Sends a Command to this Computer
+        /// </summary>
+        /// <param name="command">The command to you wish to send</param>
+        /// <returns></returns>
         public string Send(string command)
         {
             _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();

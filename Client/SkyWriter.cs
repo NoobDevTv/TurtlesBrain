@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using turtleAPI;
+
 namespace Client
 {
     public class SkyWriter
@@ -23,8 +23,7 @@ namespace Client
 
             //SortTurtles();
             //Fill();
-
-
+            
             //t.Add(new Thread(writeLetter));
             //t.Add(new Thread(writeLetter1));
             //t.Add(new Thread(writeLetter2));

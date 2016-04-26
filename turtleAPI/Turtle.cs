@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using TurtlesBrain.Shared;
 
 namespace turtleAPI
 {
+    /// <summary>
+    /// a Turtle are a essentially robot, were added in ComputerCraft.
+    /// This class represents your Turtle.
+    /// </summary>
     public class Turtle : Computer
     {
+        /// <summary>
+        /// This class creates a new connection to your turtle in the Minecraft world
+        /// </summary>
+        /// <param name="label">The Name of your Turtle</param>
         public Turtle(string label) : base(label, Server.Instance)
         {
             if (Server.Instance[label] == null)
                 throw new InvalidOperationException("turtle not found");
         }
-        
+
         internal Turtle(string label, Server server) : base(label, server)
         {
         }
@@ -86,7 +87,7 @@ namespace turtleAPI
             Reason = GetReason(result);
             return GetBool(result);
         }
-        
+
         /// <summary>
         /// Try to move the turtle backward 
         /// </summary>
@@ -109,7 +110,7 @@ namespace turtleAPI
             return GetBool(result);
         }
 
-   
+
 
         /// <summary>
         /// Turn the turtle left
@@ -1087,7 +1088,7 @@ namespace turtleAPI
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
         public bool transferTo(byte slot, byte quantity, out string Reason)
         {
-            string result = Send("turtle.transferTo(" + slot +"," + quantity+ ")");
+            string result = Send("turtle.transferTo(" + slot + "," + quantity + ")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -1111,7 +1112,7 @@ namespace turtleAPI
         public bool inspect(out string[] Reason)
         {
             string result = Send("turtle.inspect()");
-            Reason = GetArray(result,1);
+            Reason = GetArray(result, 1);
             return GetBool(result);
         }
 
@@ -1169,9 +1170,9 @@ namespace turtleAPI
         public string[] getItemDetail()
         {
             string result = Send("turtle.getItemDetail()");
-            return GetArray(result,0);
-        }  
-        
+            return GetArray(result, 0);
+        }
+
         /// <summary>
         /// Returns the ID string, count and damage values of the given slot number in an array format: { name = "modname:itemname", damage, count}. Returns nil if there is no item in the specified or currently selected slot.
         /// </summary>
@@ -1179,7 +1180,7 @@ namespace turtleAPI
 
         public string[] getItemDetail(byte slotNum)
         {
-            string result = Send("turtle.getItemDetail(" + slotNum+")");
+            string result = Send("turtle.getItemDetail(" + slotNum + ")");
             return GetArray(result, 0);
         }
     }

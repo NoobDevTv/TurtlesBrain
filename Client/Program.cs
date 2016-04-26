@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using turtleAPI;
 
 namespace Client
 {

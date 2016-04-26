@@ -11,9 +11,7 @@ namespace TurtlesBrain
         //private WebSocketServer socketServer;
         //private IWebSocketConnection socketConnection;
         private HttpListener server;
-
-
-
+        
         //public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
 

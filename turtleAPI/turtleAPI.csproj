@@ -46,6 +46,7 @@
     <Compile Include="Computer.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Turtle.cs" />
   </ItemGroup>
   <ItemGroup>

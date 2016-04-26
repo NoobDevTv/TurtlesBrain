@@ -1,35 +1,34 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
-using System.Collections.Concurrent;
+
 namespace TurtlesBrain
 {
     public class Computer
     {
         public string Label { get; private set; }
 
+        private ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> commands;
 
-        
-        private ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> commands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
-        
         private HttpListenerResponse currentResponse;
-        private readonly ManualResetEventSlim _foo = new ManualResetEventSlim(false);
-        public ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> ActiveCommands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
-
-    
+        private readonly ManualResetEventSlim foo;
+        public ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> ActiveCommands;
 
         public Computer(string label)
         {
             Label = label;
-            
+
+            commands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
+            foo = new ManualResetEventSlim(false);
+            ActiveCommands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
         }
 
         public void AddCommand(string command, TurtleServer.Result callback)
         {
             commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command, callback));
-            _foo.Set();
+            foo.Set();
 
             if (commands.Count != 1)
 
@@ -47,7 +46,7 @@ namespace TurtlesBrain
                 response = result;
                 waitHandle.Set();
             });
-            
+
             waitHandle.WaitOne();
             return response;
         }
@@ -69,14 +68,14 @@ namespace TurtlesBrain
 
         public void QueryCommand(HttpListenerResponse response)
         {
-            _foo.Wait();
+            foo.Wait();
 
             KeyValuePair<string, TurtleServer.Result> nextCommand;
             if (!commands.TryDequeue(out nextCommand))
                 throw new InvalidOperationException("");
             ActiveCommands.Enqueue(nextCommand);
             if (commands.IsEmpty)
-                _foo.Reset();
+                foo.Reset();
 
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(nextCommand.Key);
             response.ContentLength64 = buffer.Length;
