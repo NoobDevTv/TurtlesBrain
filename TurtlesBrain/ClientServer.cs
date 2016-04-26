@@ -96,7 +96,11 @@ namespace TurtlesBrain
 
                 var username = split[0];
                 var password = split[1];
-
+                //TODO: Passwort abfragen
+                /*
+                  if (Password != password)
+                    return
+                 */
                 // Do the auth.
                 var info = new ClientInfo { Name = username };
                 OnClientReady(new Client(info, stream));

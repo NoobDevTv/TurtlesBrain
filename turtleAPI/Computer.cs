@@ -15,12 +15,14 @@ namespace turtleAPI
 {
     public class Server : TurtleApiConnection
     {
+        internal static Server Instance;
         public static Server Connect(string ip, int port, string username, string password)
         {
             MessageConverter.Initialize();
 
             var t = Connection.Setup(ip, port, username, password);
             t.Wait();
+            Instance = t.Result;
             return t.Result;
         }
 

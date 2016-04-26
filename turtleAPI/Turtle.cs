@@ -5,12 +5,17 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TurtlesBrain.Shared;
 
 namespace turtleAPI
 {
     public class Turtle : Computer
     {
-
+        public Turtle(string label) : base(label, Server.Instance)
+        {
+            if (Server.Instance[label] == null)
+                throw new InvalidOperationException("turtle not found");
+        }
         
         internal Turtle(string label, Server server) : base(label, server)
         {
@@ -81,7 +86,7 @@ namespace turtleAPI
             Reason = GetReason(result);
             return GetBool(result);
         }
-
+        
         /// <summary>
         /// Try to move the turtle backward 
         /// </summary>
@@ -657,7 +662,6 @@ namespace turtleAPI
         /// the items go to that inventory instead. Then the items will be placed in the first available 
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
-        /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
         public bool dropUp()
         {
@@ -714,7 +718,6 @@ namespace turtleAPI
         /// the items go to that inventory instead. Then the items will be placed in the first available 
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
-        /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
         public bool dropDown()
         {
