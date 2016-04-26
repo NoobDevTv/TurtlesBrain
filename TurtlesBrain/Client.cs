@@ -23,7 +23,7 @@ namespace TurtlesBrain
             var cm = msg as ClientMessage;
             if(cm != null)
             {
-                Program.clientserver.Execute(cm.Label, cm.Command);
+                ClientServer.Execute(cm.Label, cm.Command);
             }
         }
     }

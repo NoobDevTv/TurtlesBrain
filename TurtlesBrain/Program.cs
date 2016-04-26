@@ -12,7 +12,6 @@ namespace TurtlesBrain
     public class Program
     {
         public static TurtleServer turtleserver;
-        public static ClientServer clientserver;
         public static WebSocketTurtleServer webserver;
 
 
@@ -23,7 +22,7 @@ namespace TurtlesBrain
             TurtleServerThread.Name = "ServerThread";
             TurtleServerThread.Start();
 
-            clientserver = new ClientServer(7777);
+            ClientServer.Start(7777);
 
 
             Console.WriteLine("Success");

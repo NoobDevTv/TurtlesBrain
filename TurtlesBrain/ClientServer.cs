@@ -10,13 +10,13 @@ using TurtlesBrain.Shared;
 
 namespace TurtlesBrain
 {
-    public class ClientServer
+    public static class ClientServer
     {
-        List<Client> clients = new List<Client>();
-        Dictionary<string, Turtle> _turtleMap = new Dictionary<string, Turtle>();
-        private TcpListener _listener;
+        private static List<Client> clients = new List<Client>();
+        private static Dictionary<string, Turtle> _turtleMap = new Dictionary<string, Turtle>();
+        private static TcpListener _listener;
 
-        public ClientServer(int port)
+        public static void Start(int port)
         {
 
             _listener = new TcpListener(IPAddress.Any, port);
@@ -25,7 +25,7 @@ namespace TurtlesBrain
             _listener.BeginAcceptTcpClient(OnClient, null);
         }
 #pragma warning disable CS4014
-        private void OnClient(IAsyncResult ar)
+        private static void OnClient(IAsyncResult ar)
         {
             Console.WriteLine("Client Connected");
             var client = _listener.EndAcceptTcpClient(ar);
@@ -36,7 +36,7 @@ namespace TurtlesBrain
 
         }
 
-        public void Execute(string label, string command)
+        public static void Execute(string label, string command)
         {
             Turtle t;
             if (_turtleMap.TryGetValue(label, out t))
@@ -48,7 +48,7 @@ namespace TurtlesBrain
 
 #pragma warning restore CS4014
 
-        private async Task Setup(TcpClient client)
+        private static async Task Setup(TcpClient client)
         {
             var stream = client.GetStream();
             using (var aes = new AesCryptoServiceProvider())
@@ -103,18 +103,36 @@ namespace TurtlesBrain
             }
         }
 
-        private void OnClientReady(Client client)
+        private static void OnClientReady(Client client)
         {
             Console.WriteLine("Client Setup Done");
             //client.WriteASync()
             clients.Add(client);
+            Clients = new Dictionary<string, Client>(Clients) { { client.Username, client } };
             foreach (var t in Program.turtleserver.turtles.Where(kvp => kvp.Key.Contains(client.Username)).Select(kvp => kvp.Value))
             {
-                t.Client = client;
-                _turtleMap[t.Label] = t;
-                client.WriteAsync(new TurtleMessage { Label = t.Label }).Wait();
+                AddTurtle(client,t);
             }
         }
+
+        public static void AddTurtle(Turtle turtle)
+        {
+            var client = Clients.Values.FirstOrDefault(c => turtle.Label.Contains(c.Username));
+            if (client != null)
+                AddTurtle(client, turtle);
+        }
+
+        public static void AddTurtle(Client client, Turtle turtle)
+        {
+            if (_turtleMap.ContainsKey(turtle.Label))
+                return;
+
+            _turtleMap[turtle.Label] = turtle;
+            turtle.Client = client;
+            client.WriteAsync(new TurtleMessage { Label = turtle.Label }).Wait();
+        }
+
+        public static  Dictionary<string, Client> Clients = new Dictionary<string, Client>();
     }
 
     public class ClientInfo

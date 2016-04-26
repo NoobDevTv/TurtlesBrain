@@ -9,6 +9,7 @@ using System.Threading;
 using TurtlesBrain.Shared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace turtleAPI
 {
@@ -18,7 +19,7 @@ namespace turtleAPI
         {
             MessageConverter.Initialize();
 
-            var t = Connection.Setup( ip,  port,  username,  password);
+            var t = Connection.Setup(ip, port, username, password);
             t.Wait();
             return t.Result;
         }
@@ -27,7 +28,14 @@ namespace turtleAPI
         {
             get
             {
-                return _turtles[label]; //always trust the user :<
+                var maxTimeOut = TimeSpan.FromMinutes(2).TotalMilliseconds + 100;
+                Turtle turtle;
+                while (!_turtles.TryGetValue(label, out turtle) && (maxTimeOut -= 100) > 0)
+                {
+                    Thread.Sleep(100);
+                }
+
+                return turtle;
             }
         }
 
@@ -37,17 +45,17 @@ namespace turtleAPI
         }
 
         //Directory<Type, Action<ITurtleApiMessage>> actions 
-        private Dictionary<string, Turtle> _turtles = new Dictionary<string, Turtle>();
-
+        // private Dictionary<string, Turtle> _turtles = new Dictionary<string, Turtle>();
+        private ConcurrentDictionary<string, Turtle> _turtles = new ConcurrentDictionary<string, Turtle>();
         protected override void Dispatch(ITurtleApiMessage msg)
         {
             Console.WriteLine(msg);
-            if(msg.GetType() == typeof(TurtleMessage))
+            if (msg.GetType() == typeof(TurtleMessage))
             {
                 var tm = (TurtleMessage)msg;
                 _turtles[tm.Label] = new Turtle(tm.Label, this);
             }
-            else if(msg.GetType() == typeof(Response))
+            else if (msg.GetType() == typeof(Response))
             {
                 var rs = (Response)msg;
                 _turtles[rs.Label].OnMessage(rs.Content);
@@ -56,18 +64,18 @@ namespace turtleAPI
         }
     }
 
-    public class Computer 
+    public class Computer
     {
         internal Computer(string label, Server server)
         {
             Label = label;
             _server = server;
         }
-        
+
 
         public string Label { get; private set; }
         //public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
-        
+
         //static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
         //static ClientInfo client = new ClientInfo(socket, null, null, ClientDirection.Both, false, EncryptionType.ServerRSAClientKey);
         AutoResetEvent wait = new AutoResetEvent(false);
@@ -81,7 +89,7 @@ namespace turtleAPI
         //    //client.OnReadMessage += Client_OnReadMessage;
         //    //client.OnReady += Client_OnReady;
         //    //client.BeginReceive();
-            
+
         //}
 
         //private void Client_OnReady(ClientInfo ci)
@@ -99,7 +107,7 @@ namespace turtleAPI
         public string Send(string command)
         {
             _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
-            wait.WaitOne();            
+            wait.WaitOne();
             return returnString;
         }
 

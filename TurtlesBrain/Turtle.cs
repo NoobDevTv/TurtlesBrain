@@ -10,14 +10,12 @@ namespace TurtlesBrain
 {
     public class Turtle : Computer
     {
-        private Queue<KeyValuePair<string, TurtleServer.Result>> commands;
         public string args;
 
         public Client Client { get; internal set; }
 
         public Turtle(string label) : base(label)
         {
-            commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
         }
     }
 }

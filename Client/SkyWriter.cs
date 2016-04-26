@@ -14,33 +14,43 @@ namespace Client
 
         public SkyWriter(string[] label, string text, string username, string password)
         {
-            var server = Server.Connect("localhost", 21337, username, password);
-            
-            Turtle turtle;
-            for (int i = 0; i <= 4; i++)
-            {
-                turtle = null;
-                while (turtle == null)
-                {
-                    turtle = server[label[i]];
-                    Thread.Sleep(500);
-                }
-                skyWriter.Add(turtle);
-            }
-            Text = text.ToLower();
-            SortTurtles();
-            Fill();
-            t.Add(new Thread(writeLetter));
-            t.Add(new Thread(writeLetter1));
-            t.Add(new Thread(writeLetter2));
-            t.Add(new Thread(writeLetter3));
-            t.Add(new Thread(writeLetter4));
-            t[0].Start();
-            t[1].Start();
-            t[2].Start();
-            t[3].Start();
-            t[4].Start();
+            var server = Server.Connect("localhost", 7777, username, password);
+            // Console.ReadKey();
+            //////////////* skyWriter.Add(server[label[0]]);*/
+            skyWriter.AddRange(label.Select(l => server[l]));
 
+            Text = text.ToLower();
+
+            //SortTurtles();
+            //Fill();
+
+
+            //t.Add(new Thread(writeLetter));
+            //t.Add(new Thread(writeLetter1));
+            //t.Add(new Thread(writeLetter2));
+            //t.Add(new Thread(writeLetter3));
+            //t.Add(new Thread(writeLetter4));
+
+            t.Add(new Thread(Turner));
+            t.Add(new Thread(Turner));
+            t.Add(new Thread(Turner));
+            t.Add(new Thread(Turner));
+            t.Add(new Thread(Turner));
+            t[0].Start(0);
+            t[1].Start(1);
+            t[2].Start(2);
+            t[3].Start(3);
+            t[4].Start(4);
+            //
+        }
+
+        public void Turner(object o)
+        {
+            var turtle = skyWriter[(int)o];
+            while (true)
+            {
+                turtle.turnRight();
+            }
         }
 
         public void SortTurtles()

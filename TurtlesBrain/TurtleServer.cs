@@ -11,13 +11,16 @@ namespace TurtlesBrain
         //private WebSocketServer socketServer;
         //private IWebSocketConnection socketConnection;
         private HttpListener server;
-        public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
+
+
+
+        //public Dictionary<string, KeyValuePair<string, Result>> commandPoolOderSo;
         public Dictionary<string, Turtle> turtles;
 
         public TurtleServer()
         {
             server = new HttpListener();
-            commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
+            //commandPoolOderSo = new Dictionary<string, KeyValuePair<string, Result>>();
             turtles = new Dictionary<string, Turtle>();
             server.Prefixes.Add("http://+:4344/user/");
             server.Prefixes.Add("http://+:4344/turtle/");
@@ -31,28 +34,6 @@ namespace TurtlesBrain
 
         }
 
-
-
-        private Turtle Handshake(string label, HttpListenerResponse response, string args)
-        {
-            CleanUp();
-            if (turtles.ContainsKey(label))
-            {
-                if (isNewTurtle(label))
-                    label = CreateUniqueName();
-            }
-
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(label);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            var turtle = new Turtle(label);
-            turtles.Add(label, turtle);
-            turtle.args = args;
-            Program.webserver.UpdateList();
-            return turtle;
-        }
 
         private bool isNewTurtle(string label)
         {
@@ -75,12 +56,12 @@ namespace TurtlesBrain
             {
                 temp.Add(item.Key, item.Value);
             }
-            foreach (KeyValuePair<string, Turtle> item in temp)
-            {
-                string s = item.Value.Send("turtle.getFuelLevel()");
-                if (s == null)
-                    turtles.Remove(item.Key);
-            }
+            //foreach (KeyValuePair<string, Turtle> item in temp)
+            //{
+            //    string s = item.Value.Send("turtle.getFuelLevel()");
+            //    if (s == null)
+            //        turtles.Remove(item.Key);
+            //}
         }
 
         private string CreateUniqueName()
@@ -101,12 +82,22 @@ namespace TurtlesBrain
 
         private void EndGetContext(IAsyncResult res)
         {
-            server.BeginGetContext(EndGetContext, null);
+            HttpListenerContext context;
+
             try
             {
-                var context = server.EndGetContext(res);
-                var request = context.Request;
-                var response = context.Response;
+                context = server.EndGetContext(res);
+                Console.WriteLine(context.Request.QueryString.Get("label"));
+            }
+            finally
+            {
+                server.BeginGetContext(EndGetContext, null);
+            }
+
+
+            var request = context.Request;
+            using (var response = context.Response)
+            {
                 string localPath = request.Url.LocalPath.TrimEnd('/');
                 if (localPath.StartsWith("/turtle/") && request.QueryString.AllKeys.Contains("label"))
                 {
@@ -120,20 +111,26 @@ namespace TurtlesBrain
                             using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
                             {
                                 string s = reader.ReadToEnd();
-                                if (GotResult != null)
-                                    GotResult.Invoke(label, s);
+                                GotResult?.Invoke(label, s);
 
-                                if (commandPoolOderSo.ContainsKey(label))
+                                Turtle commandTurtle;
+                                if (turtles.TryGetValue(label, out commandTurtle))
                                 {
-                                    commandPoolOderSo.First(c => c.Key == label).Value.Value(label, s);
-                                    commandPoolOderSo.Remove(label);
+                                    KeyValuePair<string, Result> command;
+                                    if(commandTurtle.ActiveCommands.TryDequeue(out command))
+                                        command.Value.Invoke(label, s);
+                                    else
+                                        Console.WriteLine($"Turtle {label} hat kein bock mehr :-(");
                                 }
+                                else
+                                {
+                                    throw new InvalidOperationException();
+                                }
+                                response.StatusCode = 200;
 
-                                //foreach (var result in s.Split('|'))
-                                //{
-                                //    if (result != "nil")
-                                //        Console.Write(result + " ");
-                                //}
+                                response.ContentLength64 = 0;
+                                response.Close();
+                                return;
                             }
                         }
                     }
@@ -146,11 +143,33 @@ namespace TurtlesBrain
                             using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
                             {
                                 string s = reader.ReadToEnd();
-                                Handshake(label, response, s);
+
+                                CleanUp();
+                                if (turtles.ContainsKey(label))
+                                {
+                                    if (isNewTurtle(label))
+                                        label = CreateUniqueName();
+                                }
+
+                                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(label);
+                                response.ContentLength64 = buffer.Length;
+                                response.OutputStream.Write(buffer, 0, buffer.Length);
+
+                                turtle = new Turtle(label);
+                                turtles.Add(label, turtle);
+                                turtle.args = s;
+
+                                ClientServer.AddTurtle(turtle);
+                              
+
+                                return;
+                                //Program.webserver.Upds
                             }
                         }
                     }
-                    else if (turtles.TryGetValue(label, out turtle))
+
+
+                    if (turtles.TryGetValue(label, out turtle))
                     {
                         if (turtle == null)
                         {
@@ -181,12 +200,9 @@ namespace TurtlesBrain
                 {
                     User(response);
                 }
-                response.Close();
             }
-            catch (Exception)
-            {
+            //response.Close();
 
-            }
 
         }
 

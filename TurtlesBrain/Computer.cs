@@ -3,35 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Collections.Concurrent;
 namespace TurtlesBrain
 {
     public class Computer
     {
         public string Label { get; private set; }
 
-        private Queue<KeyValuePair<string, TurtleServer.Result>> commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
 
-        private KeyValuePair<string, TurtleServer.Result> currentCommand;
+        
+        private ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> commands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
+        
         private HttpListenerResponse currentResponse;
+        private readonly ManualResetEventSlim _foo = new ManualResetEventSlim(false);
+        public ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> ActiveCommands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
 
-        public KeyValuePair<string, TurtleServer.Result> GetNextCommand()
-        {
-            if (commands.Count >= 2)
-            {
-                Console.WriteLine(commands.Count);
-                return commands.Dequeue();
-            }
-            return commands.Dequeue();
-        }
+    
 
         public Computer(string label)
         {
             Label = label;
+            
         }
 
         public void AddCommand(string command, TurtleServer.Result callback)
         {
             commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command, callback));
+            _foo.Set();
+
+            if (commands.Count != 1)
+
+                Console.WriteLine($"{Label} NOT 1 COUNT QUEU BLA ASDJKALSJDKLASJDKLAJSKLD {commands.Count}");
         }
 
         public string Send(string command)
@@ -45,16 +47,8 @@ namespace TurtlesBrain
                 response = result;
                 waitHandle.Set();
             });
-            waitHandle.WaitOne(1500);
-            while(response == null)
-            {
-                Resend((label, result) =>
-                {
-                    response = result;
-                    waitHandle.Set();
-                });
-            waitHandle.WaitOne(1500);
-            }
+            
+            waitHandle.WaitOne();
             return response;
         }
 
@@ -75,70 +69,19 @@ namespace TurtlesBrain
 
         public void QueryCommand(HttpListenerResponse response)
         {
-            while (commands.Count == 0)
-            {
-                Thread.Sleep(10);
-            }
+            _foo.Wait();
 
-            KeyValuePair<string, TurtleServer.Result> nextCommand = GetNextCommand();
-
-            currentCommand = nextCommand;
-
-            lock (Program.turtleserver.commandPoolOderSo)
-            {
-                Program.turtleserver.commandPoolOderSo.Add(Label, nextCommand);
-            }
-
-            currentResponse = response;
+            KeyValuePair<string, TurtleServer.Result> nextCommand;
+            if (!commands.TryDequeue(out nextCommand))
+                throw new InvalidOperationException("");
+            ActiveCommands.Enqueue(nextCommand);
+            if (commands.IsEmpty)
+                _foo.Reset();
 
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(nextCommand.Key);
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
 
-        public void Resend(TurtleServer.Result callback)
-        {
-            lock (Program.turtleserver.commandPoolOderSo)
-            {
-                try
-                {
-                    Program.turtleserver.commandPoolOderSo.Remove(Label);
-                }
-                finally
-                {
-                    Program.turtleserver.commandPoolOderSo.Add(Label,
-                                       new KeyValuePair<string, TurtleServer.Result>(currentCommand.Key, callback));
-                }
-            }
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(currentCommand.Key);
-            currentResponse.ContentLength64 = buffer.Length;
-            currentResponse.OutputStream.Write(buffer, 0, buffer.Length);
-        }
-
-        public bool GetBool(string theString)
-        {
-            return bool.Parse(theString.Split('|')[1]);
-        }
-
-        public byte GetByte(string theString)
-        {
-            return byte.Parse(theString.Split('|')[1]);
-        }
-
-        public int GetInt(string theString)
-        {
-            return int.Parse(theString.Split('|')[1]);
-        }
-
-        public string GetReason(string theString)
-        {
-            return theString.Split('|')[2];
-        }
-
-        public string[] GetArray(string theString, int skipAmount)
-        {
-            return theString.Split('|').Skip(skipAmount).ToArray();
-        }
     }
 }
