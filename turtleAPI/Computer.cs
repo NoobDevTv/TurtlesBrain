@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using TurtlesBrain.Shared;
 
@@ -28,31 +29,11 @@ namespace turtleAPI
             _server = server;
         }
 
-
-        //public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
-
-        //static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
-        //static ClientInfo client = new ClientInfo(socket, null, null, ClientDirection.Both, false, EncryptionType.ServerRSAClientKey);
+        
         AutoResetEvent wait = new AutoResetEvent(false);
         string returnString = "";
         private Server _server;
-
-        //public Computer(string label)
-        //{
-        //    Label = label;
-        //    //client.MessageType = MessageType.CodeAndLength;
-        //    //client.OnReadMessage += Client_OnReadMessage;
-        //    //client.OnReady += Client_OnReady;
-        //    //client.BeginReceive();
-
-        //}
-
-        //private void Client_OnReady(ClientInfo ci)
-        //{
-        //    Console.WriteLine("Client is now ready");
-        //}
-
-        
+                
         public void OnMessage(string content)
         {
             returnString = content;
@@ -66,19 +47,11 @@ namespace turtleAPI
         /// <returns></returns>
         public string Send(string command)
         {
+            Console.WriteLine($"Sending {Label}: {command}");
             _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
             wait.WaitOne();
             return returnString;
         }
-
-        //internal string getArgs()
-        //{
-
-        //    byte[] temp = Encoding.UTF8.GetBytes(Label);
-        //    client.SendMessage(2, temp);
-        //    wait.WaitOne();
-        //    return returnString;
-        //}
 
         public bool GetBool(string theString)
         {
