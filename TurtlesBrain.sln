@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain", "TurtlesBrain\TurtlesBrain.csproj", "{B8E360B0-371F-40F6-B506-34E72FC28B20}"
 EndProject
@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "turtleAPI", "turtleAPI\turt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DB4D1F36-459F-4553-8457-93F83C7E1D6F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dll's", "dll's", "{D70942A4-AD28-4C25-AC93-744500FFC6B4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Shared", "TurtlesBrain.Shared\TurtlesBrain.Shared.csproj", "{0BF96C5F-3090-4F7A-BDE8-06B73769114F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Turtles", "TurtlesBrain.Turtles\TurtlesBrain.Turtles.csproj", "{081706F9-FCC3-4183-88EE-4E9682DDFA18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +35,10 @@ Global
 		{0BF96C5F-3090-4F7A-BDE8-06B73769114F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF96C5F-3090-4F7A-BDE8-06B73769114F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BF96C5F-3090-4F7A-BDE8-06B73769114F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081706F9-FCC3-4183-88EE-4E9682DDFA18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081706F9-FCC3-4183-88EE-4E9682DDFA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081706F9-FCC3-4183-88EE-4E9682DDFA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081706F9-FCC3-4183-88EE-4E9682DDFA18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
