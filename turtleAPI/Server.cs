@@ -27,34 +27,37 @@ namespace turtleAPI
         {
             get
             {
+                Console.WriteLine(label);
                 var maxTimeOut = TimeSpan.FromMinutes(2).TotalMilliseconds + 100;
                 Turtle turtle;
                 while (!turtles.TryGetValue(label, out turtle) && (maxTimeOut -= 100) > 0)
                 {
                     Thread.Sleep(100);
                 }
-
+                
                 return turtle;
             }
         }
 
         internal Server(NetworkStream stream) : base(stream)
         {
-            //WriteAsync(new PongMessage());
         }
-
-        //Directory<Type, Action<ITurtleApiMessage>> actions 
+        
         protected override void Dispatch(ITurtleApiMessage msg)
         {
-            Console.WriteLine(msg);
+            
             if (msg.GetType() == typeof(TurtleMessage))
             {
+                
                 var tm = (TurtleMessage)msg;
-                turtles[tm.Label] = new Turtle(tm.Label, this);
+                Console.WriteLine($"TurtleMessage: {tm.Label}");
+                if (!turtles.ContainsKey(tm.Label))
+                    turtles[tm.Label] = new Turtle(tm.Label, this);
             }
             else if (msg.GetType() == typeof(Response))
             {
                 var rs = (Response)msg;
+                Console.WriteLine($"Response: {rs.Label} -> {rs.Content}");
                 turtles[rs.Label].OnMessage(rs.Content);
             }
 

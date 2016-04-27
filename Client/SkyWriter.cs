@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using turtleAPI;
@@ -18,23 +19,23 @@ namespace Client
             // Console.ReadKey();
             //////////////* skyWriter.Add(server[label[0]]);*/
             skyWriter.AddRange(label.Select(l => server[l]));
-
+            Console.WriteLine("STARTING");
             Text = text.ToLower();
 
-            //SortTurtles();
-            //Fill();
-            
-            //t.Add(new Thread(writeLetter));
-            //t.Add(new Thread(writeLetter1));
-            //t.Add(new Thread(writeLetter2));
-            //t.Add(new Thread(writeLetter3));
-            //t.Add(new Thread(writeLetter4));
+            SortTurtles();
+            Fill();
 
-            t.Add(new Thread(Turner));
-            t.Add(new Thread(Turner));
-            t.Add(new Thread(Turner));
-            t.Add(new Thread(Turner));
-            t.Add(new Thread(Turner));
+            t.Add(new Thread(writeLetter));
+            t.Add(new Thread(writeLetter1));
+            t.Add(new Thread(writeLetter2));
+            t.Add(new Thread(writeLetter3));
+            t.Add(new Thread(writeLetter4));
+
+            //t.Add(new Thread(Turner));
+            //t.Add(new Thread(Turner));
+            //t.Add(new Thread(Turner));
+            //t.Add(new Thread(Turner));
+            //t.Add(new Thread(Turner));
             t[0].Start(0);
             t[1].Start(1);
             t[2].Start(2);
@@ -77,7 +78,7 @@ namespace Client
             while (!skyWriter[0].down()) { }
         }
 
-        private void writeLetter()
+        private void writeLetter(object f)
         {
             string[] o;
             foreach (char letter in Text.ToArray())
@@ -100,7 +101,7 @@ namespace Client
                 //        counter = 0;
             }
         }
-        private void writeLetter1()
+        private void writeLetter1(object f)
         {
             string[] o;
             foreach (char letter in Text.ToArray())
@@ -122,7 +123,7 @@ namespace Client
                 //         counter = 0;
             }
         }
-        private void writeLetter2()
+        private void writeLetter2(object f)
         {
             string[] o;
             foreach (char letter in Text.ToArray())
@@ -144,7 +145,7 @@ namespace Client
                 //       counter = 0;
             }
         }
-        private void writeLetter3()
+        private void writeLetter3(object f)
         {
             string[] o;
             foreach (char letter in Text.ToArray())
@@ -166,7 +167,7 @@ namespace Client
                 //        counter = 0;
             }
         }
-        private void writeLetter4()
+        private void writeLetter4(object f)
         {
             string[] o;
             foreach (char letter in Text.ToArray())

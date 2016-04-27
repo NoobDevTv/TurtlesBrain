@@ -1,58 +1,44 @@
 ﻿using Fleck;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TurtlesBrain
 {
-    public class WebSocketTurtleServer
+    public static class WebSocketTurtleServer
     {
-        private IWebSocketConnection socket;
-        private WebSocketServer webServer;
-        private WebSocketHttpRequest req;
+        private static IWebSocketConnection socket;
+        private static WebSocketServer webServer;
+        private static WebSocketHttpRequest req;
 
-        public WebSocketTurtleServer()
+        public static void Start(int port)
         {
-            webServer = new WebSocketServer("ws://0.0.0.0:34197");
+            webServer = new WebSocketServer($"ws://0.0.0.0:{port}");
             req = new WebSocketHttpRequest();
 
             webServer.Start(internalSocket =>
             {
                 socket = internalSocket;
-                internalSocket.OnOpen = () =>
-                {
-                    string turtleList = "list";
-                    foreach (var item in Program.turtleserver.turtles)
-                    {
-                        turtleList += "|" + item.Value.Label;
-                    }
-                    internalSocket.Send(turtleList);
-                    Console.WriteLine("Socket opened");
+                internalSocket.OnOpen = () => {
+                    UpdateList();
+                    Program.Info("Socket opened");
                 };
-                internalSocket.OnClose = () => Console.WriteLine("Socket closed");
-                internalSocket.OnMessage = message => ProcessMessage(message);
-                Program.turtleserver.GotResult += (label, result) => internalSocket.Send("result|" + label + "|" + result);
+                internalSocket.OnClose = () => Program.Info("Socket closed");
+                internalSocket.OnMessage = ProcessMessage;
+                TurtleServer.GotResult += (label, result) => internalSocket.Send("result|" + label + "|" + result);
             });
         }
 
-        public void UpdateList()
-        {
-            string turtleList = "list";
-            foreach (var item in Program.turtleserver.turtles)
-            {
-                turtleList += "|" + item.Value.Label;
-            }
-            socket.Send(turtleList);
-        }
+        private static IEnumerable<string> LabelList => new[] { "list" }.Concat(ClientServer.Turtles.Select(t => t.Label));
+        public static void UpdateList() => socket.Send(string.Join("|", LabelList));
 
-        private void ProcessMessage(string message)
+        private static void ProcessMessage(string message)
         {
             Turtle turtle;
             string label = message.Split('|')[0];
             string command = message.Split('|')[1];
-            Program.turtleserver.turtles.TryGetValue(label, out turtle);
-            if (turtle != null)
-            {
-                turtle.AddCommand(command, (test, result) => { });
-            }
+            if(ClientServer.TryGetTurtle(label, out turtle))
+                turtle.Execute(command);
         }
     }
 }

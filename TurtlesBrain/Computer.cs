@@ -10,77 +10,45 @@ namespace TurtlesBrain
     {
         public string Label { get; private set; }
 
-        private ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> commands;
 
-        private HttpListenerResponse currentResponse;
-        private readonly ManualResetEventSlim foo;
-        public ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>> ActiveCommands;
+        private string _currentCommand;
+        private string _currentResult;
+
+        private readonly AutoResetEvent _cmdSetter = new AutoResetEvent(true);
+        private readonly AutoResetEvent _cmdGetter = new AutoResetEvent(false);
+        private readonly AutoResetEvent _resultGetter = new AutoResetEvent(false);
 
         public Computer(string label)
         {
             Label = label;
-
-            commands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
-            foo = new ManualResetEventSlim(false);
-            ActiveCommands = new ConcurrentQueue<KeyValuePair<string, TurtleServer.Result>>();
         }
 
-        public void AddCommand(string command, TurtleServer.Result callback)
+        public string Execute(string command)
         {
-            commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command, callback));
-            foo.Set();
-
-            if (commands.Count != 1)
-
-                Console.WriteLine($"{Label} NOT 1 COUNT QUEU BLA ASDJKALSJDKLASJDKLAJSKLD {commands.Count}");
+            Program.Debug($"{Label}: Execute -> {command}");
+            _cmdSetter.WaitOne();
+            _currentCommand = command;
+            _cmdGetter.Set();
+            _resultGetter.WaitOne();
+            _cmdSetter.Set();
+            return _currentResult;
         }
 
         public string Send(string command)
         {
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
-
-            string response = null;
-
-            AddCommand(command, (label, result) =>
-            {
-                response = result;
-                waitHandle.Set();
-            });
-
-            waitHandle.WaitOne();
-            return response;
+            return Execute(command);
         }
 
-        public string Send(string command, int timeout)
+        public void SetResult(string result)
         {
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
-
-            string response = null;
-
-            AddCommand(command, (label, result) =>
-            {
-                response = result;
-                waitHandle.Set();
-            });
-            waitHandle.WaitOne(timeout);
-            return response;
+            _currentResult = result;
+            _resultGetter.Set();
         }
 
-        public void QueryCommand(HttpListenerResponse response)
+        public string WaitForCommand()
         {
-            foo.Wait();
-
-            KeyValuePair<string, TurtleServer.Result> nextCommand;
-            if (!commands.TryDequeue(out nextCommand))
-                throw new InvalidOperationException("");
-            ActiveCommands.Enqueue(nextCommand);
-            if (commands.IsEmpty)
-                foo.Reset();
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(nextCommand.Key);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
+            _cmdGetter.WaitOne();
+            return _currentCommand;
         }
-
     }
 }

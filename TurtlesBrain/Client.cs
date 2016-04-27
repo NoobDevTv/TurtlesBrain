@@ -19,10 +19,10 @@ namespace TurtlesBrain
 
         protected override void Dispatch(ITurtleApiMessage msg)
         {
-            Console.WriteLine(msg);
             var cm = msg as ClientMessage;
             if (cm != null)
             {
+                Program.Verbose($"ClientMessage: {cm.Label} -> {cm.Command}");
                 ClientServer.Execute(cm.Label, cm.Command);
             }
         }
