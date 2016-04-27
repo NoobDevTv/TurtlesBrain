@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,9 +14,15 @@ namespace TurtlesBrain
     public static class ClientServer
     {
         private static List<Client> clients = new List<Client>();
-        private static Dictionary<string, Turtle> turtleMap = new Dictionary<string, Turtle>();
+        private static readonly Dictionary<string, Turtle> TurtleMap = new Dictionary<string, Turtle>();
         public static Dictionary<string, Client> Clients = new Dictionary<string, Client>();
         private static TcpListener listener;
+        public static List<Turtle> Turtles { get {
+            lock (TurtleMapLock)
+            {
+                return TurtleMap.Values.ToList();
+            }
+        } }
 
         public static void Start(int port)
         {
@@ -38,9 +45,13 @@ namespace TurtlesBrain
         public static void Execute(string label, string command)
         {
             Turtle t;
-            if (turtleMap.TryGetValue(label, out t))
+            if (TurtleMap.TryGetValue(label, out t))
             {
                 t.Client.WriteAsync(new Response { Content = t.Send(command), Label = label });
+            }
+            else
+            {
+                Console.WriteLine($"{label} not found (execute)");
             }
         }
 
@@ -113,10 +124,9 @@ namespace TurtlesBrain
         private static void OnClientReady(Client client)
         {
             Console.WriteLine("Client Setup Done");
-            //client.WriteASync()
             clients.Add(client);
             Clients = new Dictionary<string, Client>(Clients) { { client.Username, client } };
-            foreach (var t in Program.turtleserver.turtles.Where(kvp => kvp.Key.Contains(client.Username)).Select(kvp => kvp.Value))
+            foreach (var t in Turtles.Where(ta => ta.Label.Contains(client.Username)))
             {
                 AddTurtle(client, t);
             }
@@ -125,20 +135,41 @@ namespace TurtlesBrain
         public static void AddTurtle(Turtle turtle)
         {
             var client = Clients.Values.FirstOrDefault(c => turtle.Label.Contains(c.Username));
-            if (client != null)
-                AddTurtle(client, turtle);
+            AddTurtle(client, turtle);
         }
+
+        private static readonly object TurtleMapLock = new object();
 
         public static void AddTurtle(Client client, Turtle turtle)
         {
-            if (turtleMap.ContainsKey(turtle.Label))
-                return;
+            lock (TurtleMapLock)
+            {
+                if (!TurtleMap.ContainsKey(turtle.Label))
+                    TurtleMap[turtle.Label] = turtle;
+            }
 
-            turtleMap[turtle.Label] = turtle;
-            turtle.Client = client;
-            client.WriteAsync(new TurtleMessage { Label = turtle.Label }).Wait();
+            if (client != null)
+            {
+                turtle.Client = client;
+                client.WriteAsync(new TurtleMessage {Label = turtle.Label}).Wait();
+            }
         }
 
+        public static bool TryGetTurtle(string label, out Turtle turtle )
+        {
+            lock (TurtleMapLock)
+            {
+                return TurtleMap.TryGetValue(label, out turtle);
+            }
+        }
+
+        public static bool RemoveTurtle(string label)
+        {
+            lock (TurtleMapLock)
+            {
+                return TurtleMap.Remove(label);
+            }
+        }
     }
 }
 
