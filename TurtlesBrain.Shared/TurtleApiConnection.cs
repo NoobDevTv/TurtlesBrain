@@ -13,15 +13,13 @@ namespace TurtlesBrain.Shared
         private byte[] writerBuffer;
         private readonly byte[] headerBuffer;
 
-        private readonly ManualResetEventSlim writerReset;
+        private readonly AutoResetEvent writerReset = new AutoResetEvent(true);
 
         protected TurtleApiConnection(NetworkStream stream)
         {
             readerBuffer = new byte[4096];
             writerBuffer = new byte[8];
             headerBuffer = new byte[8];
-
-            writerReset = new ManualResetEventSlim(true);
 
             this.stream = stream;
             this.stream.BeginRead(headerBuffer, 0, headerBuffer.Length, this.OnHeaderRead, null);
@@ -74,7 +72,7 @@ namespace TurtlesBrain.Shared
 
         public async Task WriteAsync(ITurtleApiMessage msg)
         {
-            writerReset.Wait();
+            writerReset.WaitOne();
 
             try
             {
