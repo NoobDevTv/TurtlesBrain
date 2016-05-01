@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using TurtlesBrain.Shared;
@@ -23,6 +25,7 @@ namespace turtleAPI
             return t.Result;
         }
 
+        public List<Turtle> AllTurtles => turtles.Values.ToList();
         public Turtle this[string label]
         {
             get

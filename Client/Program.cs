@@ -9,8 +9,8 @@ namespace Client
             Console.ReadKey();
             
             SkyWriter writer = new SkyWriter(
-                new string[] { "jkl1", "jkl2", "jkl3", "jkl4", "jkl5", }, 
-                "text to write","jkl","b");
+                new string[] { "susch1", "susch2", "susch3", "susch4", "susch5", }, 
+                "text to write","susch", "thisisapasswortfortheturtles");
             Console.ReadKey();
         }
     

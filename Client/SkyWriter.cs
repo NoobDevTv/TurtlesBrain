@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using turtleAPI;
 
 namespace Client
@@ -16,31 +17,41 @@ namespace Client
         public SkyWriter(string[] label, string text, string username, string password)
         {
             var server = Server.Connect("localhost", 7777, username, password);
-            // Console.ReadKey();
+            Console.WriteLine(DateTime.UtcNow.Ticks);
+            ThreadPool.SetMaxThreads(50, 50);
+            Task.Run(() => Console.WriteLine(DateTime.UtcNow.Ticks));
+            Console.ReadKey();
             //////////////* skyWriter.Add(server[label[0]]);*/
-            skyWriter.AddRange(label.Select(l => server[l]));
+            //skyWriter.AddRange(label.Select(l => server[l]));
             Console.WriteLine("STARTING");
             Text = text.ToLower();
+            //  Console.ReadKey();
+            skyWriter.AddRange(server.AllTurtles);
+            for (int i = 0; i < skyWriter.Count; i++)
+            {
+                t.Add(new Thread(Turner));
+                t[i].Start(i);
+            }
+            Console.ReadKey();
+            //SortTurtles();
+            //Fill();
 
-            SortTurtles();
-            Fill();
-
-            t.Add(new Thread(writeLetter));
-            t.Add(new Thread(writeLetter1));
-            t.Add(new Thread(writeLetter2));
-            t.Add(new Thread(writeLetter3));
-            t.Add(new Thread(writeLetter4));
+            //t.Add(new Thread(writeLetter));
+            //t.Add(new Thread(writeLetter1));
+            //t.Add(new Thread(writeLetter2));
+            //t.Add(new Thread(writeLetter3));
+            //t.Add(new Thread(writeLetter4));
 
             //t.Add(new Thread(Turner));
             //t.Add(new Thread(Turner));
             //t.Add(new Thread(Turner));
             //t.Add(new Thread(Turner));
             //t.Add(new Thread(Turner));
-            t[0].Start(0);
-            t[1].Start(1);
-            t[2].Start(2);
-            t[3].Start(3);
-            t[4].Start(4);
+            //t[0].Start(0);
+            //t[1].Start(1);
+            //t[2].Start(2);
+            //t[3].Start(3);
+            //t[4].Start(4);
             //
         }
 

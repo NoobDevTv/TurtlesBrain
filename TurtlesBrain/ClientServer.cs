@@ -107,12 +107,12 @@ namespace TurtlesBrain
 
                     var username = split[0];
                     var password = split[1];
-
+                    //Magnetband oder CD oder DVD oder Kristallspeicher oder This Kette oder Kuhleder?
                     //TODO: Passwort abfragen
-                    /*
-                      if (Password != password)
-                        return
-                     */
+                    
+                    if (!AuthManager.Authenticate(username,password, out username))
+                        return;
+                     
                     // Do the auth.
 
                     var info = new ClientInfo { Name = username };

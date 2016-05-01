@@ -15,7 +15,7 @@ namespace TurtlesBrain.Turtles
             System.Net.ServicePointManager.MaxServicePoints = 1000;
 
             Thread.Sleep(1000);
-            foreach (var s in new [] { "jkl1","jkl2","jkl3","jkl4","jkl5", "jkl5"})
+            foreach (var s in new [] { "susch1", "susch2", "susch3", "susch4", "susch5", "susch5" })
             {
                 new Turtle(s).Run();
                 Thread.Sleep(100);

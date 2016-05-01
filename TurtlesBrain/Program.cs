@@ -22,6 +22,7 @@ namespace TurtlesBrain
             TurtleServer.Start(4344);
             ClientServer.Start(7777);
             WebSocketTurtleServer.Start(34197);
+            AuthManager.Initialize("ourDB");
 
             Info("Success");
 
