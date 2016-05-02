@@ -17,5 +17,8 @@ namespace TurtlesBrain
             Username = username;
             Password = pw;
         }
+        public Account()
+        {
+        }
     }
 }

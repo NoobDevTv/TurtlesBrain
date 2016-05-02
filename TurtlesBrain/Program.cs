@@ -27,7 +27,7 @@ namespace TurtlesBrain
             ClientServer.Start(i);
             int.TryParse(ConfigurationManager.AppSettings.Get("WebSocketTurtleServerPort"), out i);
             WebSocketTurtleServer.Start(i);
-            AuthManager.Initialize("ourDB");
+            AuthManager.Initialize("MyData");
 
             Info("Success");
 

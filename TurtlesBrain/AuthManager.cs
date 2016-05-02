@@ -1,21 +1,20 @@
 ﻿using System;
 using System.IO;
-using Eloquera.Client;
 using System.Security;
 using System.Linq;
+using LiteDB;
+using System.Collections.Generic;
 
 namespace TurtlesBrain
 {
     internal static class AuthManager
     {
-        static DB db = new DB("server=(local);password=;options=none;");
+        static LiteDatabase db;
+        static LiteCollection<Account> accounts;
         internal static bool Authenticate(string username, string password, out string correctUsername)
         {
-            
-            correctUsername = (from Account a in db
-                               where a.Password == password
-                               where a.Username.ToLower().Contains(username.ToLower())
-                               select a).FirstOrDefault()?.Username;
+            correctUsername = accounts.Find(x => x.Password == password).
+                              Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault().Username;
 
             if (correctUsername != null)
                 return true;
@@ -23,17 +22,23 @@ namespace TurtlesBrain
             return false;
         }
 
-        public static void Insert(object data)
+        public static void Insert(Account data)
         {
-            if (db.IsOpen)
-                db.Store(data);
+            if (db != null)
+                accounts.Insert(data);
+        }
+
+        public static void InsertList(List<Account> accountList)
+        {
+            if (db == null)
+                return;
+            accounts.InsertBulk(accountList);
         }
 
         public static void Initialize(string DBname)
         {
-            if (!File.Exists($"{DBname}.eq"))
-                db.CreateDatabase(DBname);
-            db.OpenDatabase(DBname);
+            db = new LiteDatabase(DBname + ".db");
+            accounts = db.GetCollection<Account>("accounts");
 
         }
     }

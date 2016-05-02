@@ -33,16 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eloquera.Client, Version=6.3.3.13, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\EloqueraDB.6.3.3\lib\net40\Eloquera.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Eloquera.Common, Version=6.3.3.13, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\EloqueraDB.6.3.3\lib\net40\Eloquera.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Eloquera.Server, Version=6.3.3.13, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\EloqueraDB.6.3.3\lib\net40\Eloquera.Server.exe</HintPath>
+    <Reference Include="LiteDB, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c2fff750805920e, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.1.0.4\lib\net40\LiteDB.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -60,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Eloquera.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
