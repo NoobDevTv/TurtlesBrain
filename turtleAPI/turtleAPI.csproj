@@ -52,9 +52,6 @@
     <Compile Include="Turtle.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\TurtlesBrain.Shared\TurtlesBrain.Shared.csproj">
       <Project>{0bf96c5f-3090-4f7a-bde8-06b73769114f}</Project>
       <Name>TurtlesBrain.Shared</Name>

@@ -21,8 +21,8 @@ namespace DBTeast
 
              
              db.Store(new Account("susch", "thisisapasswortfortheturtle"));
-            
-             db.Close();           
+
+            db.Close();
 
             Console.ReadKey();
         }

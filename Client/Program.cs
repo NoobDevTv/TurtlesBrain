@@ -10,7 +10,7 @@ namespace Client
             
             SkyWriter writer = new SkyWriter(
                 new string[] { "susch1", "susch2", "susch3", "susch4", "susch5", }, 
-                "text to write","susch", "thisisapasswortfortheturtles");
+                "text to write");
             Console.ReadKey();
         }
     

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using turtleAPI;
+using static System.Configuration.ConfigurationManager;
 
 namespace Client
 {
@@ -13,10 +14,10 @@ namespace Client
         Dictionary<string, string[]> dict = new Dictionary<string, string[]>();
         static string Text;
         List<Thread> t = new List<Thread>();
-
-        public SkyWriter(string[] label, string text, string username, string password)
+        public SkyWriter(string[] label, string text)
         {
-            var server = Server.Connect("localhost", 7777, username, password);
+            var server = Server.Connect(AppSettings.Get("ServerIp"),Convert.ToInt32(AppSettings.Get("ServerPort")), 
+                AppSettings.Get("Username"), AppSettings.Get("Password"));
             Console.WriteLine(DateTime.UtcNow.Ticks);
             ThreadPool.SetMaxThreads(50, 50);
             Task.Run(() => Console.WriteLine(DateTime.UtcNow.Ticks));

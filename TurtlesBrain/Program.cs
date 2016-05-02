@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Threading;
 using TurtlesBrain.Shared;
@@ -19,9 +20,13 @@ namespace TurtlesBrain
 
             MessageConverter.Initialize();
 
-            TurtleServer.Start(4344);
-            ClientServer.Start(7777);
-            WebSocketTurtleServer.Start(34197);
+            int i;
+            int.TryParse(ConfigurationManager.AppSettings.Get("TurtleServerPort"), out i);
+            TurtleServer.Start(i);
+            int.TryParse(ConfigurationManager.AppSettings.Get("ClientServerPort"), out i);
+            ClientServer.Start(i);
+            int.TryParse(ConfigurationManager.AppSettings.Get("WebSocketTurtleServerPort"), out i);
+            WebSocketTurtleServer.Start(i);
             AuthManager.Initialize("ourDB");
 
             Info("Success");
