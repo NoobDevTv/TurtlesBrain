@@ -1,20 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace turtleAPI
 {
+    /// <summary>
+    /// a Turtle are a essentially robot, were added in ComputerCraft.
+    /// This class represents your Turtle.
+    /// </summary>
     public class Turtle : Computer
     {
-
-
-        public Turtle(string label) : base(label)
+        /// <summary>
+        /// This class creates a new connection to your turtle in the Minecraft world
+        /// </summary>
+        /// <param name="label">The Name of your Turtle</param>
+        public Turtle(string label) : base(label, Server.Instance)
         {
-            
+            if (Server.Instance[label] == null)
+                throw new InvalidOperationException("turtle not found");
+        }
+
+        internal Turtle(string label, Server server) : base(label, server)
+        {
         }
 
         /// <summary>
@@ -104,6 +109,8 @@ namespace turtleAPI
             Reason = GetReason(result);
             return GetBool(result);
         }
+
+
 
         /// <summary>
         /// Turn the turtle left
@@ -656,7 +663,6 @@ namespace turtleAPI
         /// the items go to that inventory instead. Then the items will be placed in the first available 
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
-        /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
         public bool dropUp()
         {
@@ -713,7 +719,6 @@ namespace turtleAPI
         /// the items go to that inventory instead. Then the items will be placed in the first available 
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
-        /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
         public bool dropDown()
         {
@@ -1083,7 +1088,7 @@ namespace turtleAPI
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
         public bool transferTo(byte slot, byte quantity, out string Reason)
         {
-            string result = Send("turtle.transferTo(" + slot +"," + quantity+ ")");
+            string result = Send("turtle.transferTo(" + slot + "," + quantity + ")");
             Reason = GetReason(result);
             return GetBool(result);
         }
@@ -1095,19 +1100,19 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspect()
         {
-            string[] dataArray;
-            return inspect(out dataArray);
+            string[] reason;
+            return inspect(out reason);
         }
         /// <summary>
         /// Returns the ID string and metadata of the block in front of the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="dataArray">the array including the data</param>
+        /// <param name="Reason">the reason of failur</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspect(out string[] dataArray)
+        public bool inspect(out string[] Reason)
         {
             string result = Send("turtle.inspect()");
-            dataArray = GetArray(result,1);
+            Reason = GetArray(result, 1);
             return GetBool(result);
         }
 
@@ -1125,12 +1130,12 @@ namespace turtleAPI
         /// Returns the ID string and metadata of the block below the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="dataArray">the array including the data</param>
+        /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectDown(out string[] dataArray)
+        public bool inspectDown(out string[] Reason)
         {
             string result = Send("turtle.inspectDown()");
-            dataArray = GetArray(result, 1);
+            Reason = GetArray(result, 1);
             return GetBool(result);
         }
 
@@ -1141,19 +1146,19 @@ namespace turtleAPI
         /// <returns>boolean if there was a inspectable block present</returns>
         public bool inspectUp()
         {
-            string[] dataArray;
-            return inspectUp(out dataArray);
+            string[] reason;
+            return inspectUp(out reason);
         }
         /// <summary>
         /// Returns the ID string and metadata of the block above the Turtle in an array format: { name = "modname:blockname", metadata, state}.<para />
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
-        /// <param name="dataArray">the array including the data</param>
+        /// <param name="Reason">the reason of failur</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectUp(out string[] dataArray)
+        public bool inspectUp(out string[] Reason)
         {
             string result = Send("turtle.inspectUp()");
-            dataArray = GetArray(result, 1);
+            Reason = GetArray(result, 1);
             return GetBool(result);
         }
 
@@ -1165,9 +1170,9 @@ namespace turtleAPI
         public string[] getItemDetail()
         {
             string result = Send("turtle.getItemDetail()");
-            return GetArray(result,0);
-        }  
-        
+            return GetArray(result, 0);
+        }
+
         /// <summary>
         /// Returns the ID string, count and damage values of the given slot number in an array format: { name = "modname:itemname", damage, count}. Returns nil if there is no item in the specified or currently selected slot.
         /// </summary>
@@ -1175,7 +1180,7 @@ namespace turtleAPI
 
         public string[] getItemDetail(byte slotNum)
         {
-            string result = Send("turtle.getItemDetail(" + slotNum+")");
+            string result = Send("turtle.getItemDetail(" + slotNum + ")");
             return GetArray(result, 0);
         }
     }

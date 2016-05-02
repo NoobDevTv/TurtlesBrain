@@ -1,144 +1,54 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
+
 namespace TurtlesBrain
 {
     public class Computer
     {
         public string Label { get; private set; }
 
-        private Queue<KeyValuePair<string, TurtleServer.Result>> commands = new Queue<KeyValuePair<string, TurtleServer.Result>>();
 
-        private KeyValuePair<string, TurtleServer.Result> currentCommand;
-        private HttpListenerResponse currentResponse;
+        private string _currentCommand;
+        private string _currentResult;
 
-        public KeyValuePair<string, TurtleServer.Result> GetNextCommand()
-        {
-            if (commands.Count >= 2)
-            {
-                Console.WriteLine(commands.Count);
-                return commands.Dequeue();
-            }
-            return commands.Dequeue();
-        }
+        private readonly AutoResetEvent _cmdSetter = new AutoResetEvent(true);
+        private readonly AutoResetEvent _cmdGetter = new AutoResetEvent(false);
+        private readonly AutoResetEvent _resultGetter = new AutoResetEvent(false);
 
         public Computer(string label)
         {
             Label = label;
         }
 
-        public void AddCommand(string command, TurtleServer.Result callback)
+        public string Execute(string command)
         {
-            commands.Enqueue(new KeyValuePair<string, TurtleServer.Result>(command, callback));
+            Program.Debug($"{Label}: Execute -> {command}");
+            _cmdSetter.WaitOne();
+            _currentCommand = command;
+            _cmdGetter.Set();
+            _resultGetter.WaitOne();
+            _cmdSetter.Set();
+            return _currentResult;
         }
 
         public string Send(string command)
         {
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
-
-            string response = null;
-
-            AddCommand(command, (label, result) =>
-            {
-                response = result;
-                waitHandle.Set();
-            });
-            waitHandle.WaitOne(1500);
-            while(response == null)
-            {
-                Resend((label, result) =>
-                {
-                    response = result;
-                    waitHandle.Set();
-                });
-            waitHandle.WaitOne(1500);
-            }
-            return response;
+            return Execute(command);
         }
 
-        public string Send(string command, int timeout)
+        public void SetResult(string result)
         {
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
-
-            string response = null;
-
-            AddCommand(command, (label, result) =>
-            {
-                response = result;
-                waitHandle.Set();
-            });
-            waitHandle.WaitOne(timeout);
-            return response;
+            _currentResult = result;
+            _resultGetter.Set();
         }
 
-        public void QueryCommand(HttpListenerResponse response)
+        public string WaitForCommand()
         {
-            while (commands.Count == 0)
-            {
-                Thread.Sleep(10);
-            }
-
-            KeyValuePair<string, TurtleServer.Result> nextCommand = GetNextCommand();
-
-            currentCommand = nextCommand;
-
-            lock (Program.server.commandPoolOderSo)
-            {
-                Program.server.commandPoolOderSo.Add(Label, nextCommand);
-            }
-
-            currentResponse = response;
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(nextCommand.Key);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-        }
-
-        public void Resend(TurtleServer.Result callback)
-        {
-            lock (Program.server.commandPoolOderSo)
-            {
-                try
-                {
-                    Program.server.commandPoolOderSo.Remove(Label);
-                }
-                finally
-                {
-                    Program.server.commandPoolOderSo.Add(Label,
-                                       new KeyValuePair<string, TurtleServer.Result>(currentCommand.Key, callback));
-                }
-            }
-
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(currentCommand.Key);
-            currentResponse.ContentLength64 = buffer.Length;
-            currentResponse.OutputStream.Write(buffer, 0, buffer.Length);
-        }
-
-        public bool GetBool(string theString)
-        {
-            return bool.Parse(theString.Split('|')[1]);
-        }
-
-        public byte GetByte(string theString)
-        {
-            return byte.Parse(theString.Split('|')[1]);
-        }
-
-        public int GetInt(string theString)
-        {
-            return int.Parse(theString.Split('|')[1]);
-        }
-
-        public string GetReason(string theString)
-        {
-            return theString.Split('|')[2];
-        }
-
-        public string[] GetArray(string theString, int skipAmount)
-        {
-            return theString.Split('|').Skip(skipAmount).ToArray();
+            _cmdGetter.WaitOne();
+            return _currentCommand;
         }
     }
 }

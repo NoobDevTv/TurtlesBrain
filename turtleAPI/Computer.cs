@@ -1,53 +1,54 @@
-﻿using System.IO;
+﻿using System;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System;
-using System.Net.Sockets;
-using RedCorona.Net;
 using System.Threading;
+using TurtlesBrain.Shared;
 
 namespace turtleAPI
 {
+    /// <summary>
+    /// represents a Computer in the Minecraft world.
+    /// The Computer is the main block of ComputerCraft
+    /// </summary>
     public class Computer
     {
+        /// <summary>
+        /// The Name of your Computer
+        /// </summary>
         public string Label { get; private set; }
-        public string[] args { get { return GetArray(getArgs(), 0); } set { args = value; } }
 
-        static WebRequest req;
-        static Socket socket = Sockets.CreateTCPSocket("suschpc.noip.me", 7777);
-        static ClientInfo client = new ClientInfo(socket, false);
-        AutoResetEvent wait = new AutoResetEvent(false);
-        string returnString ="";
-
-        public Computer(string label)
+        /// <summary>
+        /// represents a Computer in the Minecraft world.
+        /// The Computer is the main block of ComputerCraft.
+        /// This initialize the connection to your computer
+        /// </summary>
+        /// <param name="label">the label of the Computer</param>
+        /// <param name="server">the API Server which holds the connection to the Minecraftserver</param>
+        public Computer(string label, Server server)
         {
             Label = label;
-            client.MessageType = MessageType.CodeAndLength;
-            client.OnReadMessage += Client_OnReadMessage;
-            client.BeginReceive();
+            _server = server;
         }
 
-        private void Client_OnReadMessage(ClientInfo ci, uint code, byte[] bytes, int len)
+        
+        AutoResetEvent wait = new AutoResetEvent(false);
+        string returnString = "";
+        private Server _server;
+                
+        public void OnMessage(string content)
         {
-            returnString = Encoding.UTF8.GetString(bytes);
+            returnString = content;
             wait.Set();
         }
 
-
+        /// <summary>
+        /// Sends a Command to this Computer
+        /// </summary>
+        /// <param name="command">The command to you wish to send</param>
+        /// <returns></returns>
         public string Send(string command)
         {
-            byte[] temp = Encoding.UTF8.GetBytes(Label + "|" + command);
-            client.SendMessage(1, temp);
-            wait.WaitOne();
-            return returnString;
-        }
-
-        internal string getArgs()
-        {
-
-            byte[] temp = Encoding.UTF8.GetBytes(Label);
-            client.SendMessage(2, temp);
+            Console.WriteLine($"Sending {Label}: {command}");
+            _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
             wait.WaitOne();
             return returnString;
         }

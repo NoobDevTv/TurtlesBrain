@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{044F2B70-70E2-4C1F-BB70-5E8F7C71089E}</ProjectGuid>
+    <ProjectGuid>{0BF96C5F-3090-4F7A-BDE8-06B73769114F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>turtleAPI</RootNamespace>
-    <AssemblyName>turtleAPI</AssemblyName>
+    <RootNamespace>TurtlesBrain.Shared</RootNamespace>
+    <AssemblyName>TurtlesBrain.Shared</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
     <DocumentationFile>
     </DocumentationFile>
   </PropertyGroup>
@@ -35,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,17 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Computer.cs" />
-    <Compile Include="Connection.cs" />
+    <Compile Include="ITurtleApiMessage.cs" />
+    <Compile Include="MessageConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="Turtle.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TurtlesBrain.Shared\TurtlesBrain.Shared.csproj">
-      <Project>{0bf96c5f-3090-4f7a-bde8-06b73769114f}</Project>
-      <Name>TurtlesBrain.Shared</Name>
-    </ProjectReference>
+    <Compile Include="TurtleApiConnection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
