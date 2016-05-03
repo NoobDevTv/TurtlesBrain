@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain", "TurtlesBrain\TurtlesBrain.csproj", "{B8E360B0-371F-40F6-B506-34E72FC28B20}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Shared", "Turt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Turtles", "TurtlesBrain.Turtles\TurtlesBrain.Turtles.csproj", "{081706F9-FCC3-4183-88EE-4E9682DDFA18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBTeast", "DBTeast\DBTeast.csproj", "{EA387D19-1ABE-428D-8C8B-2D52D344872E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseInserter", "DBTeast\DatabaseInserter.csproj", "{EA387D19-1ABE-428D-8C8B-2D52D344872E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

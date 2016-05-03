@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA387D19-1ABE-428D-8C8B-2D52D344872E}</ProjectGuid>
+    <ProjectGuid>{FEEEC17C-F454-4FCF-8A84-3D72BC6B2B02}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DBTeast</RootNamespace>
-    <AssemblyName>DBTeast</AssemblyName>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <AssemblyName>ConsoleApplication1</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,11 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LiteDB, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c2fff750805920e, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiteDB.1.0.4\lib\net40\LiteDB.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,12 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TurtlesBrain\TurtlesBrain.csproj">
-      <Project>{b8e360b0-371f-40f6-b506-34e72fc28b20}</Project>
-      <Name>TurtlesBrain</Name>
+    <ProjectReference Include="..\turtleAPI\turtleAPI.csproj">
+      <Project>{044f2b70-70e2-4c1f-bb70-5e8f7c71089e}</Project>
+      <Name>turtleAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TurtlesBrain.Shared\TurtlesBrain.Shared.csproj">
+      <Project>{0bf96c5f-3090-4f7a-bde8-06b73769114f}</Project>
+      <Name>TurtlesBrain.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

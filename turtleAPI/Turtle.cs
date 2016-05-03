@@ -26,7 +26,7 @@ namespace turtleAPI
         /// Try to move the turtle down
         /// </summary>
         /// <returns>boolean success</returns>
-        public bool down()
+        public virtual bool down()
         {
             string reason = "";
             return down(out reason);
@@ -37,7 +37,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
-        public bool down(out string Reason)
+        public virtual bool down(out string Reason)
         {
             string result = Send("turtle.down()");
             Reason = GetReason(result);
@@ -48,7 +48,7 @@ namespace turtleAPI
         /// Try to move the turtle up
         /// </summary>
         /// <returns>boolean success</returns>
-        public bool up()
+        public virtual bool up()
         {
             string reason = "";
             return up(out reason);
@@ -59,7 +59,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
-        public bool up(out string Reason)
+        public virtual bool up(out string Reason)
         {
             string result = Send("turtle.up()");
             Reason = GetReason(result);
@@ -70,7 +70,7 @@ namespace turtleAPI
         /// Try to move the turtle forward 
         /// </summary>
         /// <returns>boolean success</returns>
-        public bool forward()
+        public virtual bool forward()
         {
             string reason = "";
             return forward(out reason);
@@ -81,7 +81,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
-        public bool forward(out string Reason)
+        public virtual bool forward(out string Reason)
         {
             string result = Send("turtle.forward()");
             Reason = GetReason(result);
@@ -92,7 +92,7 @@ namespace turtleAPI
         /// Try to move the turtle backward 
         /// </summary>
         /// <returns>boolean success </returns>
-        public bool back()
+        public virtual bool back()
         {
             string reason = "";
             return back(out reason);
@@ -103,7 +103,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean of success and string of reason by faiure</returns>
-        public bool back(out string Reason)
+        public virtual bool back(out string Reason)
         {
             string result = Send("turtle.back()");
             Reason = GetReason(result);
@@ -116,7 +116,7 @@ namespace turtleAPI
         /// Turn the turtle left
         /// </summary>
         /// <returns>boolean success</returns>
-        public bool turnLeft()
+        public virtual bool turnLeft()
         {
             string result = Send("turtle.turnLeft()");
             return GetBool(result);
@@ -126,7 +126,7 @@ namespace turtleAPI
         /// Turn the turtle right
         /// </summary>
         /// <returns>boolean success </returns>
-        public bool turnRight()
+        public virtual bool turnRight()
         {
             string result = Send("turtle.turnRight()");
             return GetBool(result);
@@ -137,7 +137,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slot">slot number, upper left 1 and lower right 16</param>
         /// <returns>boolean success</returns>
-        public bool select(byte slot)
+        public virtual bool select(byte slot)
         {
             string result = Send("turtle.select(" + slot + ")");
             return GetBool(result);
@@ -147,7 +147,7 @@ namespace turtleAPI
         /// Indicates the currently selected inventory slot	
         /// </summary>
         /// <returns>byte slotNumber</returns>
-        public byte getSelectedSlot()
+        public virtual byte getSelectedSlot()
         {
             return GetByte(Send("turtle.getSelectedSlot()"));
         }
@@ -158,7 +158,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slotNum">slot number, upper left 1 and lower right 16</param>
         /// <returns>slotNum the number of items found in the specified slot.</returns>
-        public byte getItemCount(byte slotNum)
+        public virtual byte getItemCount(byte slotNum)
         {
             string result = Send("turtle.getItemCount(" + slotNum + ")");
             return GetByte(result);
@@ -168,7 +168,7 @@ namespace turtleAPI
         /// Counts how many items are in the currently selected slot
         /// </summary>
         /// <returns></returns>
-        public byte getItemCount()
+        public virtual byte getItemCount()
         {
             string result = Send("turtle.getItemCount()");
             return GetByte(result);
@@ -178,7 +178,7 @@ namespace turtleAPI
         /// get the number of remaining space in the current slot
         /// </summary>
         /// <returns>byte space</returns>
-        public byte getItemSpace()
+        public virtual byte getItemSpace()
         {
             string result = Send("turtle.getItemSpace()");
             return GetByte(result);
@@ -189,7 +189,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slotNum">slot number, upper left 1 and lower right 16</param>
         /// <returns>byte space</returns>
-        public byte getItemSpace(byte slotNum)
+        public virtual byte getItemSpace(byte slotNum)
         {
             string result = Send("turtle.getItemSpace(" + slotNum + ")");
             return GetByte(result);
@@ -202,7 +202,7 @@ namespace turtleAPI
         /// • Works only with ComputerCraft 1.6 or greater!
         /// </summary>
         /// <returns>boolean was the item equipped successfully</returns>
-        public bool equipLeft()
+        public virtual bool equipLeft()
         {
             string reason = "";
             return equipLeft(out reason);
@@ -215,7 +215,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean was the item equipped successfully</returns>
-        public bool equipLeft(out string Reason)
+        public virtual bool equipLeft(out string Reason)
         {
             string result = Send("turtle.equipLeft()");
             Reason = GetReason(result);
@@ -229,7 +229,7 @@ namespace turtleAPI
         /// • Works only with ComputerCraft 1.6 or greater! 
         /// </summary>
         /// <returns>boolean was the item equipped successfully</returns>
-        public bool equipRight()
+        public virtual bool equipRight()
         {
             string reason = "";
             return equipRight(out reason);
@@ -243,7 +243,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean was the item equipped successfully</returns>
-        public bool equipRight(out string Reason)
+        public virtual bool equipRight(out string Reason)
         {
             string result = Send("turtle.equipRight()");
             Reason = GetReason(result);
@@ -254,7 +254,7 @@ namespace turtleAPI
         /// Attempts to attack in front of the turtle.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in attacking forward</returns>
-        public bool attack()
+        public virtual bool attack()
         {
             string reason = "";
             return attack(out reason);
@@ -265,7 +265,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in attacking forward</returns>
-        public bool attack(out string Reason)
+        public virtual bool attack(out string Reason)
         {
             string result = Send("turtle.attack()");
             Reason = GetReason(result);
@@ -276,7 +276,7 @@ namespace turtleAPI
         /// Attempts to attack above the turtle.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in attacking upwards</returns>
-        public bool attackUp()
+        public virtual bool attackUp()
         {
             string reason = "";
             return attackUp(out reason);
@@ -287,7 +287,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in attacking upwards</returns>
-        public bool attackUp(out string Reason)
+        public virtual bool attackUp(out string Reason)
         {
             string result = Send("turtle.attackUp()");
             Reason = GetReason(result);
@@ -298,7 +298,7 @@ namespace turtleAPI
         /// Attempts to attack below the turtle.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in attacking downwards</returns>
-        public bool attackDown()
+        public virtual bool attackDown()
         {
             string reason = "";
             return attackDown(out reason);
@@ -309,7 +309,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in attacking downwards</returns>
-        public bool attackDown(out string Reason)
+        public virtual bool attackDown(out string Reason)
         {
             string result = Send("turtle.attackDown()");
             Reason = GetReason(result);
@@ -323,7 +323,7 @@ namespace turtleAPI
         /// is not a full stack yet), or in the next available slot.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool dig()
+        public virtual bool dig()
         {
             string reason = "";
             return dig(out reason);
@@ -337,7 +337,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool dig(out string Reason)
+        public virtual bool dig(out string Reason)
         {
             string result = Send("turtle.dig()");
             Reason = GetReason(result);
@@ -351,7 +351,7 @@ namespace turtleAPI
         /// is not a full stack yet), or in the next available slot.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool digUp()
+        public virtual bool digUp()
         {
             string reason = "";
             return digUp(out reason);
@@ -365,7 +365,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool digUp(out string Reason)
+        public virtual bool digUp(out string Reason)
         {
             string result = Send("turtle.digUp()");
             Reason = GetReason(result);
@@ -379,7 +379,7 @@ namespace turtleAPI
         /// is not a full stack yet), or in the next available slot.
         /// </summary>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool digDown()
+        public virtual bool digDown()
         {
             string reason = "";
             return digDown(out reason);
@@ -393,7 +393,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean whether the turtle succeeded in digging</returns>
-        public bool digDown(out string Reason)
+        public virtual bool digDown(out string Reason)
         {
             string result = Send("turtle.digDown()");
             Reason = GetReason(result);
@@ -404,7 +404,7 @@ namespace turtleAPI
         /// Places the selected block in front of the Turtle.
         /// </summary>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool place()
+        public virtual bool place()
         {
             string reason = "";
             return place(out reason);
@@ -415,7 +415,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool place(out string Reason)
+        public virtual bool place(out string Reason)
         {
             string result = Send("turtle.place()");
             Reason = GetReason(result);
@@ -428,7 +428,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="signText">Text of sign. New line can be achived by using \n character</param>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool place(string signText)
+        public virtual bool place(string signText)
         {
             string reason = "";
             return place(signText, out reason);
@@ -441,7 +441,7 @@ namespace turtleAPI
         /// <param name="signText">Text of sign. New line can be achived by using \n character</param>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool place(string signText, out string Reason)
+        public virtual bool place(string signText, out string Reason)
         {
             string result = Send("turtle.place(" + signText + ")");
             Reason = GetReason(result);
@@ -453,7 +453,7 @@ namespace turtleAPI
         /// Places the selected block above of the Turtle.
         /// </summary>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool placeUp()
+        public virtual bool placeUp()
         {
             string reason = "";
             return placeUp(out reason);
@@ -463,7 +463,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool placeUp(out string Reason)
+        public virtual bool placeUp(out string Reason)
         {
             string result = Send("turtle.placeUp()");
             Reason = GetReason(result);
@@ -474,7 +474,7 @@ namespace turtleAPI
         /// Places the selected block below of the Turtle.
         /// </summary>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool placeDown()
+        public virtual bool placeDown()
         {
             string reason = "";
             return placeDown(out reason);
@@ -484,7 +484,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the blockplacement was succesful</returns>
-        public bool placeDown(out string Reason)
+        public virtual bool placeDown(out string Reason)
         {
             string result = Send("turtle.placeDown()");
             Reason = GetReason(result);
@@ -495,7 +495,7 @@ namespace turtleAPI
         /// Detects if there is a Block in front. Does not detect mobs or liquids or floating items.
         /// </summary>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detect()
+        public virtual bool detect()
         {
             string reason = "";
             return detect(out reason);
@@ -506,7 +506,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detect(out string Reason)
+        public virtual bool detect(out string Reason)
         {
             string result = Send("turtle.detect()");
             Reason = GetReason(result);
@@ -517,7 +517,7 @@ namespace turtleAPI
         /// Detects if there is a Block above. Does not detect mobs or liquids or floating items.
         /// </summary>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detectUp()
+        public virtual bool detectUp()
         {
             string reason = "";
             return detectUp(out reason);
@@ -528,7 +528,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detectUp(out string Reason)
+        public virtual bool detectUp(out string Reason)
         {
             string result = Send("turtle.detectUp()");
             Reason = GetReason(result);
@@ -539,7 +539,7 @@ namespace turtleAPI
         /// Detects if there is a Block below. Does not detect mobs or liquids or floating items.
         /// </summary>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detectDown()
+        public virtual bool detectDown()
         {
             string reason = "";
             return detectDown(out reason);
@@ -550,7 +550,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean if the turtle has detected a block</returns>
-        public bool detectDown(out string Reason)
+        public virtual bool detectDown(out string Reason)
         {
             string result = Send("turtle.detectDown()");
             Reason = GetReason(result);
@@ -562,7 +562,7 @@ namespace turtleAPI
         /// Detects if the block in front is the same as the one in the selected Slot.
         /// </summary>
         /// <returns>boolean if the block in front is the same as the one in the selected Slot.</returns>
-        public bool compare()
+        public virtual bool compare()
         {
             string result = Send("turtle.compare()");
             return GetBool(result);
@@ -572,7 +572,7 @@ namespace turtleAPI
         /// Detects if the block above is the same as the one in the selected Slot.
         /// </summary>
         /// <returns>boolean if the block above is the same as the one in the selected Slot.</returns>
-        public bool compareUp()
+        public virtual bool compareUp()
         {
             string result = Send("turtle.compareUp()");
             return GetBool(result);
@@ -582,7 +582,7 @@ namespace turtleAPI
         /// Detects if the block below is the same as the one in the selected Slot.
         /// </summary>
         /// <returns>boolean if the block below is the same as the one in the selected Slot.</returns>
-        public bool compareDown()
+        public virtual bool compareDown()
         {
             string result = Send("turtle.compareDown()");
             return GetBool(result);
@@ -593,7 +593,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slot"></param>
         /// <returns>boolean true if the selected item matches the one in the specified slot.</returns>
-        public bool compareTo(byte slot)
+        public virtual bool compareTo(byte slot)
         {
             string result = Send("turtle.compareTo(" + slot + ")");
             return GetBool(result);
@@ -606,7 +606,7 @@ namespace turtleAPI
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool drop()
+        public virtual bool drop()
         {
             string reason = "";
             return drop(out reason);
@@ -620,7 +620,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool drop(out string Reason)
+        public virtual bool drop(out string Reason)
         {
             string result = Send("turtle.drop()");
             Reason = GetReason(result);
@@ -635,7 +635,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount to drop</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool drop(byte amount)
+        public virtual bool drop(byte amount)
         {
             string reason = "";
             return drop(amount, out reason);
@@ -650,7 +650,7 @@ namespace turtleAPI
         /// <param name="amount">the amount to drop</param>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool drop(byte amount, out string Reason)
+        public virtual bool drop(byte amount, out string Reason)
         {
             string result = Send("turtle.drop(" + amount + ")");
             Reason = GetReason(result);
@@ -664,7 +664,7 @@ namespace turtleAPI
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropUp()
+        public virtual bool dropUp()
         {
             string reason = "";
             return dropUp(out reason);
@@ -677,7 +677,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropUp(out string Reason)
+        public virtual bool dropUp(out string Reason)
         {
             string result = Send("turtle.dropUp()");
             Reason = GetReason(result);
@@ -692,7 +692,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount to drop</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropUp(byte amount)
+        public virtual bool dropUp(byte amount)
         {
             string reason = "";
             return dropUp(amount, out reason);
@@ -706,7 +706,7 @@ namespace turtleAPI
         /// <param name="amount">the amount to drop</param>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropUp(byte amount, out string Reason)
+        public virtual bool dropUp(byte amount, out string Reason)
         {
             string result = Send("turtle.dropUp(" + amount + ")");
             Reason = GetReason(result);
@@ -720,7 +720,7 @@ namespace turtleAPI
         /// slot of the inventory, starting at the top left, moving right and then down.
         /// </summary>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropDown()
+        public virtual bool dropDown()
         {
             string reason = "";
             return dropDown(out reason);
@@ -733,7 +733,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropDown(out string Reason)
+        public virtual bool dropDown(out string Reason)
         {
             string result = Send("turtle.dropDown()");
             Reason = GetReason(result);
@@ -747,7 +747,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount to drop</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropDown(byte amount)
+        public virtual bool dropDown(byte amount)
         {
             string reason = "";
             return dropDown(amount, out reason);
@@ -761,7 +761,7 @@ namespace turtleAPI
         /// <param name="amount">the amount to drop</param>
         /// <param name="Reason">reason of failure</param>
         /// <returns>boolean true if an item was dropped; false otherwise.</returns>
-        public bool dropDown(byte amount, out string Reason)
+        public virtual bool dropDown(byte amount, out string Reason)
         {
             string result = Send("turtle.dropDown(" + amount + ")");
             Reason = GetReason(result);
@@ -776,7 +776,7 @@ namespace turtleAPI
         /// • If the currently selected turtle slot is 16 and the next slot is required, it will loop around and try turtle slot 1, and so on.<para />
         /// </summary>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suck()
+        public virtual bool suck()
         {
             string reason = "";
             return suck(out reason);
@@ -791,7 +791,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suck(out string Reason)
+        public virtual bool suck(out string Reason)
         {
             string result = Send("turtle.suck()");
             Reason = GetReason(result);
@@ -808,7 +808,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount of items to suck up</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suck(byte amount)
+        public virtual bool suck(byte amount)
         {
             string reason = "";
             return suck(amount, out reason);
@@ -825,7 +825,7 @@ namespace turtleAPI
         /// <param name="amount">the amount of items to suck up</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suck(byte amount, out string Reason)
+        public virtual bool suck(byte amount, out string Reason)
         {
             string result = Send("turtle.suck(" + amount + ")");
             Reason = GetReason(result);
@@ -840,7 +840,7 @@ namespace turtleAPI
         /// • If the currently selected turtle slot is 16 and the next slot is required, it will loop around and try turtle slot 1, and so on.<para />
         /// </summary>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckUp()
+        public virtual bool suckUp()
         {
             string reason = "";
             return suckUp(out reason);
@@ -855,7 +855,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckUp(out string Reason)
+        public virtual bool suckUp(out string Reason)
         {
             string result = Send("turtle.suckUp()");
             Reason = GetReason(result);
@@ -872,7 +872,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount of items to suck up</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckUp(byte amount)
+        public virtual bool suckUp(byte amount)
         {
             string reason = "";
             return suckUp(amount, out reason);
@@ -889,7 +889,7 @@ namespace turtleAPI
         /// <param name="amount">the amount of items to suck up</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckUp(byte amount, out string Reason)
+        public virtual bool suckUp(byte amount, out string Reason)
         {
             string result = Send("turtle.suckUp(" + amount + ")");
             Reason = GetReason(result);
@@ -904,7 +904,7 @@ namespace turtleAPI
         /// • If the currently selected turtle slot is 16 and the next slot is required, it will loop around and try turtle slot 1, and so on.<para />
         /// </summary>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckDown()
+        public virtual bool suckDown()
         {
             string reason = "";
             return suckDown(out reason);
@@ -919,7 +919,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckDown(out string Reason)
+        public virtual bool suckDown(out string Reason)
         {
             string result = Send("turtle.suckDown()");
             Reason = GetReason(result);
@@ -936,7 +936,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="amount">the amount of items to suck up</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckDown(byte amount)
+        public virtual bool suckDown(byte amount)
         {
             string reason = "";
             return suckDown(amount, out reason);
@@ -953,7 +953,7 @@ namespace turtleAPI
         /// <param name="amount">the amount of items to suck up</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if at least one item was moved into the turtle's inventory; false otherwise.</returns>
-        public bool suckDown(byte amount, out string Reason)
+        public virtual bool suckDown(byte amount, out string Reason)
         {
             string result = Send("turtle.suckDown(" + amount + ")");
             Reason = GetReason(result);
@@ -965,7 +965,7 @@ namespace turtleAPI
         /// • With ComputerCraft 1.6 or greater the turtles have a limited amount of storable full and trying to get over the limit will destroy the fuel. There will be no error returned.
         /// </summary>
         /// <returns>boolean true if fueled, else false.</returns>
-        public bool refuel()
+        public virtual bool refuel()
         {
             string reason = "";
             return suckDown(out reason);
@@ -977,7 +977,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if fueled, else false.</returns>
-        public bool refuel(out string Reason)
+        public virtual bool refuel(out string Reason)
         {
             string result = Send("turtle.refuel()");
             Reason = GetReason(result);
@@ -990,7 +990,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="quantity">the amount of items to be consumed as fuel</param>
         /// <returns>boolean true if fueled, else false.</returns>
-        public bool refuel(byte quantity)
+        public virtual bool refuel(byte quantity)
         {
             string reason = "";
             return suckDown(quantity, out reason);
@@ -1003,7 +1003,7 @@ namespace turtleAPI
         /// <param name="quantity">the amount of items to be consumed as fuel</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean true if fueled, else false.</returns>
-        public bool refuel(byte quantity, out string Reason)
+        public virtual bool refuel(byte quantity, out string Reason)
         {
             string result = Send("turtle.refuel(" + quantity + ")");
             Reason = GetReason(result);
@@ -1014,7 +1014,7 @@ namespace turtleAPI
         /// Returns the amount of fuel inside the turtle.
         /// </summary>
         /// <returns>amount of fuel inside the turtle</returns>
-        public int getFuelLevel()
+        public virtual int getFuelLevel()
         {
             string result = Send("turtle.getFuelLevel()");
             return GetInt(result);
@@ -1025,7 +1025,7 @@ namespace turtleAPI
         /// • Requires ComputerCraft 1.6 or greater, otherwise the turtles store unlimited amount of fuel!
         /// </summary>
         /// <returns></returns>
-        public int getFuelLimit()
+        public virtual int getFuelLimit()
         {
             string result = Send("turtle.getFuelLimit()");
             return GetInt(result);
@@ -1039,7 +1039,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="slot">the slot number, to which the items should be transfered</param>
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
-        public bool transferTo(byte slot)
+        public virtual bool transferTo(byte slot)
         {
             string reason = "";
             return transferTo(slot, out reason);
@@ -1054,7 +1054,7 @@ namespace turtleAPI
         /// <param name="slot">the slot number, to which the items should be transfered</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
-        public bool transferTo(byte slot, out string Reason)
+        public virtual bool transferTo(byte slot, out string Reason)
         {
             string result = Send("turtle.transferTo(" + slot + ")");
             Reason = GetReason(result);
@@ -1070,7 +1070,7 @@ namespace turtleAPI
         /// <param name="slot">the slot number, to which the items should be transfered</param>
         /// <param name="quantity">the amount to be transfered</param>
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
-        public bool transferTo(byte slot, byte quantity)
+        public virtual bool transferTo(byte slot, byte quantity)
         {
             string reason = "";
             return transferTo(slot, quantity, out reason);
@@ -1086,7 +1086,7 @@ namespace turtleAPI
         /// <param name="quantity">the amount to be transfered</param>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean success if any item could be transfered, otherwise false</returns>
-        public bool transferTo(byte slot, byte quantity, out string Reason)
+        public virtual bool transferTo(byte slot, byte quantity, out string Reason)
         {
             string result = Send("turtle.transferTo(" + slot + "," + quantity + ")");
             Reason = GetReason(result);
@@ -1098,7 +1098,7 @@ namespace turtleAPI
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspect()
+        public virtual bool inspect()
         {
             string[] reason;
             return inspect(out reason);
@@ -1109,7 +1109,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failur</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspect(out string[] Reason)
+        public virtual bool inspect(out string[] Reason)
         {
             string result = Send("turtle.inspect()");
             Reason = GetArray(result, 1);
@@ -1121,7 +1121,7 @@ namespace turtleAPI
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectDown()
+        public virtual bool inspectDown()
         {
             string[] reason;
             return inspectDown(out reason);
@@ -1132,7 +1132,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failure</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectDown(out string[] Reason)
+        public virtual bool inspectDown(out string[] Reason)
         {
             string result = Send("turtle.inspectDown()");
             Reason = GetArray(result, 1);
@@ -1144,7 +1144,7 @@ namespace turtleAPI
         /// • The "state" string requires at least Minecraft 1.8+, and isn't implemented yet.
         /// </summary>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectUp()
+        public virtual bool inspectUp()
         {
             string[] reason;
             return inspectUp(out reason);
@@ -1155,7 +1155,7 @@ namespace turtleAPI
         /// </summary>
         /// <param name="Reason">the reason of failur</param>
         /// <returns>boolean if there was a inspectable block present</returns>
-        public bool inspectUp(out string[] Reason)
+        public virtual bool inspectUp(out string[] Reason)
         {
             string result = Send("turtle.inspectUp()");
             Reason = GetArray(result, 1);
@@ -1167,7 +1167,7 @@ namespace turtleAPI
         /// </summary>
         /// <returns>array of strings with name, damage and amount of item in the current slot</returns>
 
-        public string[] getItemDetail()
+        public virtual string[] getItemDetail()
         {
             string result = Send("turtle.getItemDetail()");
             return GetArray(result, 0);
@@ -1178,7 +1178,7 @@ namespace turtleAPI
         /// </summary>
         /// <returns>array of strings with name, damage and amount of the item in the given slot</returns>
 
-        public string[] getItemDetail(byte slotNum)
+        public virtual  string[] getItemDetail(byte slotNum)
         {
             string result = Send("turtle.getItemDetail(" + slotNum + ")");
             return GetArray(result, 0);

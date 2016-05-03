@@ -25,7 +25,7 @@ namespace turtleAPI
             return t.Result;
         }
 
-        public List<Turtle> AllTurtles => turtles.Values.ToList();
+        public List<Turtle> AllTurtles => turtles.Values.ToList(); //TODO: Keine 2 Instanzen von Turtles!
         public Turtle this[string label]
         {
             get
