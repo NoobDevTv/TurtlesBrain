@@ -30,10 +30,10 @@ namespace turtleAPI
         }
 
         
-        AutoResetEvent wait = new AutoResetEvent(false);
-        string returnString = "";
+        internal AutoResetEvent wait = new AutoResetEvent(false);
+        public string returnString = "";
         private Server _server;
-                
+
         public void OnMessage(string content)
         {
             returnString = content;
@@ -50,7 +50,7 @@ namespace turtleAPI
             Console.WriteLine($"Sending {Label}: {command}");
             _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
             wait.WaitOne();
-            return returnString;
+            return Server.Instance[Label].returnString;
         }
 
         public bool GetBool(string theString)

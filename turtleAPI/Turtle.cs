@@ -16,6 +16,8 @@ namespace turtleAPI
         {
             if (Server.Instance[label] == null)
                 throw new InvalidOperationException("turtle not found");
+            this.wait = Server.Instance[label].wait;
+
         }
 
         internal Turtle(string label, Server server) : base(label, server)

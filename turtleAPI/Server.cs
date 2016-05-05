@@ -62,6 +62,7 @@ namespace turtleAPI
                 var rs = (Response)msg;
                 Console.WriteLine($"Response: {rs.Label} -> {rs.Content}");
                 turtles[rs.Label].OnMessage(rs.Content);
+                
             }
 
         }
