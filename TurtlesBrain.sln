@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Shared", "Turt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtlesBrain.Turtles", "TurtlesBrain.Turtles\TurtlesBrain.Turtles.csproj", "{081706F9-FCC3-4183-88EE-4E9682DDFA18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseInserter", "DBTeast\DatabaseInserter.csproj", "{EA387D19-1ABE-428D-8C8B-2D52D344872E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseInserter", "DatabaseInserter\DatabaseInserter.csproj", "{EA387D19-1ABE-428D-8C8B-2D52D344872E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

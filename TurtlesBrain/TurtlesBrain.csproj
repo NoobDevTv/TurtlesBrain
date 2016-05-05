@@ -105,6 +105,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LiteDB.dll" />
     <Content Include="user.html" />
   </ItemGroup>
   <ItemGroup>

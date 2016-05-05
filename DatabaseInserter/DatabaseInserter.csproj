@@ -72,12 +72,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TurtlesBrain\TurtlesBrain.csproj">
-      <Project>{b8e360b0-371f-40f6-b506-34e72fc28b20}</Project>
-      <Name>TurtlesBrain</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
