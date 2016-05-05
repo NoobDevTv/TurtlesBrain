@@ -30,7 +30,7 @@ namespace TurtlesBrain
             AuthManager.Initialize("MyData");
 
             Info("Success");
-
+            
             Console.ReadLine();
         }
 
