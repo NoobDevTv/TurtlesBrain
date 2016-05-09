@@ -16,6 +16,10 @@ namespace turtleAPI
         /// </summary>
         public string Label { get; private set; }
 
+        public string ReturnString = "";
+        internal AutoResetEvent wait;
+        private Server server;
+
         /// <summary>
         /// represents a Computer in the Minecraft world.
         /// The Computer is the main block of ComputerCraft.
@@ -25,18 +29,14 @@ namespace turtleAPI
         /// <param name="server">the API Server which holds the connection to the Minecraftserver</param>
         public Computer(string label, Server server)
         {
+            wait = new AutoResetEvent(false);
             Label = label;
-            _server = server;
+            this.server = server;
         }
-
         
-        internal AutoResetEvent wait = new AutoResetEvent(false);
-        public string returnString = "";
-        private Server _server;
-
         public void OnMessage(string content)
         {
-            returnString = content;
+            ReturnString = content;
             wait.Set();
         }
 
@@ -48,9 +48,9 @@ namespace turtleAPI
         public string Send(string command)
         {
             Console.WriteLine($"Sending {Label}: {command}");
-            _server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
+            server.WriteAsync(new ClientMessage { Label = Label, Command = command }).Wait();
             wait.WaitOne();
-            return Server.Instance[Label].returnString;
+            return Server.Instance[Label].ReturnString;
         }
 
         public bool GetBool(string theString)

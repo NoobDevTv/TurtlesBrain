@@ -10,11 +10,11 @@ namespace turtleAPI
     {
         internal static async Task<Server> Setup(string ip, int port, string username, string password)
         {
-            var tcpClient = new TcpClient();
+            TcpClient tcpClient = new TcpClient();
             await tcpClient.ConnectAsync(ip, port);
             Console.WriteLine("Connected");
-            var stream = tcpClient.GetStream();
-            var aes = new AesCryptoServiceProvider();
+            NetworkStream stream = tcpClient.GetStream();
+            AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
 
             using (var dh = new ECDiffieHellmanCng())
             {

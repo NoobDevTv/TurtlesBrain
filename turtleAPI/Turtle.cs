@@ -111,9 +111,7 @@ namespace turtleAPI
             Reason = GetReason(result);
             return GetBool(result);
         }
-
-
-
+        
         /// <summary>
         /// Turn the turtle left
         /// </summary>

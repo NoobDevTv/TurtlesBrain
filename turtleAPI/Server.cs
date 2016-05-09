@@ -12,19 +12,6 @@ namespace turtleAPI
     {
         internal static Server Instance;
         private static ConcurrentDictionary<string, Turtle> turtles;
-
-        public static Server Connect(string ip, int port, string username, string password)
-        {
-            MessageConverter.Initialize();
-
-            turtles = new ConcurrentDictionary<string, Turtle>();
-
-            var t = Connection.Setup(ip, port, username, password);
-            t.Wait();
-            Instance = t.Result;
-            return t.Result;
-        }
-
         public List<Turtle> AllTurtles => turtles.Values.ToList(); //TODO: Keine 2 Instanzen von Turtles!
         public Turtle this[string label]
         {
@@ -40,6 +27,18 @@ namespace turtleAPI
                 
                 return turtle;
             }
+        }
+
+        public static Server Connect(string ip, int port, string username, string password)
+        {
+            MessageConverter.Initialize();
+
+            turtles = new ConcurrentDictionary<string, Turtle>();
+
+            var t = Connection.Setup(ip, port, username, password);
+            t.Wait();
+            Instance = t.Result;
+            return t.Result;
         }
 
         internal Server(NetworkStream stream) : base(stream)

@@ -17,12 +17,16 @@ namespace TurtlesBrain
         private static readonly Dictionary<string, Turtle> TurtleMap = new Dictionary<string, Turtle>();
         public static Dictionary<string, Client> Clients = new Dictionary<string, Client>();
         private static TcpListener listener;
-        public static List<Turtle> Turtles { get {
-            lock (TurtleMapLock)
+        public static List<Turtle> Turtles
+        {
+            get
             {
-                return TurtleMap.Values.ToList();
+                lock (TurtleMapLock)
+                {
+                    return TurtleMap.Values.ToList();
+                }
             }
-        } }
+        }
 
         public static void Start(int port)
         {
@@ -107,13 +111,9 @@ namespace TurtlesBrain
 
                     var username = split[0];
                     var password = split[1];
-                    //Magnetband oder CD oder DVD oder Kristallspeicher oder This Kette oder Kuhleder?
-                    //TODO: Passwort abfragen
-                    
-                    if (!AuthManager.Authenticate(username,password, out username))
+
+                    if (!AuthManager.Authenticate(username, password, out username))
                         return;
-                     
-                    // Do the auth.
 
                     var info = new ClientInfo { Name = username };
                     OnClientReady(new Client(info, stream));
@@ -151,11 +151,11 @@ namespace TurtlesBrain
             if (client != null)
             {
                 turtle.Client = client;
-                client.WriteAsync(new TurtleMessage {Label = turtle.Label}).Wait();
+                client.WriteAsync(new TurtleMessage { Label = turtle.Label }).Wait();
             }
         }
 
-        public static bool TryGetTurtle(string label, out Turtle turtle )
+        public static bool TryGetTurtle(string label, out Turtle turtle)
         {
             lock (TurtleMapLock)
             {

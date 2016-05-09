@@ -5,7 +5,6 @@ namespace DatabaseInserter
 {
     class Program
     {
-
         static LiteDatabase db;
         static LiteCollection<Account> accounts;
         static void Main(string[] args)
@@ -25,6 +24,6 @@ namespace DatabaseInserter
             Console.WriteLine("Successfully inserted. Press any key to close this console");
             Console.ReadKey();
         }
-        
+
     }
 }
